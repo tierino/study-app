@@ -31,6 +31,18 @@ function Home(props) {
     }
   }
 
+  async function handleUnfollow(e) {
+    e.preventDefault();
+    const unfollowedUsername = e.target[0].value;
+
+    if (unfollowedUsername.trim().length > 0) {
+      const response = await axios.post("/follows/remove", {
+        unfollowedUsername,
+      });
+      console.log(response);
+    }
+  }
+
   function renderFollowing() {
     if (props.user.following) {
       return props.user.following.map((account) => {
@@ -62,6 +74,11 @@ function Home(props) {
         <p>Enter the username of the account to follow:</p>
         <input></input>
         <button>Follow</button>
+      </form>
+      <form onSubmit={handleUnfollow}>
+        <p>Enter the username of the account to unfollow:</p>
+        <input></input>
+        <button>Unfollow</button>
       </form>
       <p>Following:</p>
       {renderFollowing()}

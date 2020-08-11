@@ -6,6 +6,7 @@ const keys = require("../config/keys");
 const User = mongoose.model("users");
 
 module.exports = (app) => {
+  /* --- FOLLOW ACCOUNT --- */
   app.post("/follows/new", (req, res) => {
     // Username of the user being followed
     const followedUsername = req.body.followedUsername;
@@ -37,5 +38,41 @@ module.exports = (app) => {
     }
 
     followAccount();
+  });
+
+  /* --- UNFOLLOW ACCOUNT --- */
+  app.post("/follows/remove", (req, res) => {
+    // Username of the user being unfollowed
+    const unfollowedUsername = req.body.unfollowedUsername;
+    // Username and ID of the unfollower
+    const unfollowerUsername = req.user.username;
+    const unfollowerId = req.user._id.toString();
+
+    async function unfollowAccount() {
+      // Get the model of the user being unfollowed
+      const unfollowedUser = await User.findOne({
+        username: unfollowedUsername,
+      });
+
+      // Check if the user being unfollowed exists
+      if (unfollowedUser) {
+        const unfollowedId = unfollowedUser._id.toString();
+        // Add unfollowed account's ID to user's unfollowingIds array.
+        await User.findByIdAndUpdate(unfollowerId, {
+          $pull: {
+            following: { id: unfollowedId, username: unfollowedUsername },
+          },
+        });
+        // Add unfollowing account's ID to unfollowed account's unfollowerIds array.
+        await User.findByIdAndUpdate(unfollowedUser._id, {
+          $pull: {
+            unfollowers: { id: unfollowerId, username: unfollowerUsername },
+          },
+        });
+      }
+      res.send(unfollowedUser);
+    }
+
+    unfollowAccount();
   });
 };
