@@ -24,7 +24,7 @@ function Home(props) {
     const followedUsername = e.target[0].value;
 
     if (followedUsername.trim().length > 0) {
-      const response = await axios.post("/follows/new", {
+      const response = await axios.post("/follows/add", {
         followedUsername,
       });
       console.log(response);
@@ -38,6 +38,18 @@ function Home(props) {
     if (unfollowedUsername.trim().length > 0) {
       const response = await axios.post("/follows/remove", {
         unfollowedUsername,
+      });
+      console.log(response);
+    }
+  }
+
+  async function createPost(e) {
+    e.preventDefault();
+    const content = e.target[0].value;
+
+    if (content.trim().length > 0) {
+      const response = await axios.post("/posts/create", {
+        content,
       });
       console.log(response);
     }
@@ -79,6 +91,11 @@ function Home(props) {
         <p>Enter the username of the account to unfollow:</p>
         <input></input>
         <button>Unfollow</button>
+      </form>
+      <form onSubmit={createPost}>
+        <p>Create a new post:</p>
+        <input></input>
+        <button>Post</button>
       </form>
       <p>Following:</p>
       {renderFollowing()}

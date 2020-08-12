@@ -7,7 +7,7 @@ const User = mongoose.model("users");
 
 module.exports = (app) => {
   /* --- FOLLOW ACCOUNT --- */
-  app.post("/follows/new", (req, res) => {
+  app.post("/follows/add", (req, res) => {
     // Username of the user being followed
     const followedUsername = req.body.followedUsername;
     // Username and ID of the follower
