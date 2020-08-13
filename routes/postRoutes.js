@@ -4,6 +4,7 @@ const keys = require("../config/keys");
 
 // Pulling the 'Post' model class out of mongoose as an object
 const Post = mongoose.model("posts");
+const User = mongoose.model("users");
 
 module.exports = (app) => {
   app.post("/posts/create", (req, res) => {
@@ -12,17 +13,36 @@ module.exports = (app) => {
     // const authorId = req.user._id.toString();
 
     async function createPost() {
+      // Create the post in MongoDB
       const response = await Post.create({
         author,
         content,
+        date: Date.now(),
       });
-      res.send(response);
+
+      // Not working
+      await User.findByIdAndUpdate(author._id, {
+        $push: {
+          recentPosts: { author, content, date: Date.now() },
+          $slice: -10,
+        },
+      });
+
+      res.send(response.data);
     }
 
     createPost();
   });
 
-  app.post("/posts/feed", (req, res) => {
-    // Retrieve a feed of posts
+  app.get("/posts/from_user", (req, res) => {
+    const user = req.body.user;
+
+    async function fetchPosts() {
+      const user = await User.findOne({ username: user.username });
+
+      console.log(user.postIds);
+    }
+
+    fetchPosts();
   });
 };

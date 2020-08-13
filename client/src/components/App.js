@@ -11,6 +11,7 @@ import Home from "./Home";
 const App = (props) => {
   useEffect(() => {
     props.fetchUser();
+    console.log("yep");
   }, []);
 
   if (props.user === undefined) {

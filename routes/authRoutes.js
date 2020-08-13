@@ -23,11 +23,11 @@ module.exports = (app) => {
     }
   );
 
-  app.get("/api/current_user", (req, res) => {
+  app.get("/users/current_user", (req, res) => {
     res.send(req.user);
   });
 
-  app.get("/api/signout", (req, res) => {
+  app.get("/users/signout", (req, res) => {
     req.logout();
     res.redirect("/");
   });

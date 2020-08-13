@@ -6,7 +6,7 @@ const keys = require("../config/keys");
 const User = mongoose.model("users");
 
 module.exports = (app) => {
-  app.post("/settings/changeUsername", (req, res) => {
+  app.post("/account/changeUsername", (req, res) => {
     const newUsername = req.body.newUsername;
     const id = req.user._id;
 

@@ -26,7 +26,7 @@ app.use(bodyParser.json({ type: "*/*" }));
 // Call routing functions with 'app' object
 require("./routes/authRoutes")(app);
 require("./routes/followRoutes")(app);
-require("./routes/settingsRoutes")(app);
+require("./routes/accountRoutes")(app);
 require("./routes/postRoutes")(app);
 
 const PORT = process.env.PORT || 5000;

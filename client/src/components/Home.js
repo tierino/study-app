@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import axios from "axios";
+import { fetchUser } from "../actions";
 
 import requireAuth from "./requireAuth";
 
@@ -12,10 +13,11 @@ function Home(props) {
     const newUsername = e.target[0].value;
 
     if (newUsername.trim().length > 0) {
-      const response = await axios.post("/settings/changeUsername", {
+      const response = await axios.post("/account/changeUsername", {
         newUsername,
       });
       console.log(response);
+      props.fetchUser();
     }
   }
 
@@ -28,6 +30,7 @@ function Home(props) {
         followedUsername,
       });
       console.log(response);
+      props.fetchUser();
     }
   }
 
@@ -40,6 +43,7 @@ function Home(props) {
         unfollowedUsername,
       });
       console.log(response);
+      props.fetchUser();
     }
   }
 
@@ -73,8 +77,8 @@ function Home(props) {
 
   return (
     <div>
-      <p>Hi, you are signed in :)</p>
-      <a href="/api/signout">
+      <p>Signed in as {props.user.username}</p>
+      <a href="/users/signout">
         <button>Sign out</button>
       </a>
       <form onSubmit={handleUsernameChange}>
@@ -112,4 +116,4 @@ function mapStateToProps(state) {
 }
 
 // Wrap in requireAuth HOC
-export default connect(mapStateToProps)(requireAuth(Home));
+export default connect(mapStateToProps, { fetchUser })(requireAuth(Home));

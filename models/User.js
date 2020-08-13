@@ -6,6 +6,7 @@ const userSchema = new Schema({
   username: { type: String, unique: true, lowercase: true },
   following: Array,
   followers: Array,
+  recentPosts: Array,
 });
 
 // Load the userSchema into mongoose
