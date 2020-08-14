@@ -1,4 +1,4 @@
-import { FETCH_USER } from "../actions/types";
+import { FETCH_USER, AUTH_USER, AUTH_ERROR } from "../actions/types";
 
 const initialState = {};
 
@@ -8,6 +8,17 @@ export default (state = initialState, { type, payload }) => {
       return {
         ...state,
         user: payload || false,
+      };
+    case AUTH_USER:
+      return {
+        ...state,
+        user: payload.user,
+        token: payload.token,
+      };
+    case AUTH_ERROR:
+      return {
+        ...state,
+        error: payload,
       };
     default:
       return state;

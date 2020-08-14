@@ -14,6 +14,14 @@ function Welcome(props) {
   return (
     <div>
       <p>Hi, you are not signed in :(</p>
+      <a href="/signin">
+        <button>Sign in</button>
+      </a>{" "}
+      <br />
+      <a href="/signup">
+        <button>Sign up</button>
+      </a>
+      <p>or</p>
       <a href="/auth/google">
         <button>Sign in with Google</button>
       </a>

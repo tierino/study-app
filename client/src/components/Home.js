@@ -78,7 +78,7 @@ function Home(props) {
   return (
     <div>
       <p>Signed in as {props.user.username}</p>
-      <a href="/users/signout">
+      <a href="/auth/signout">
         <button>Sign out</button>
       </a>
       <form onSubmit={handleUsernameChange}>

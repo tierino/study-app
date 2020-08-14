@@ -10,6 +10,12 @@ import reducers from "./reducers";
 
 const store = createStore(
   reducers,
+  {
+    auth: {
+      token: localStorage.getItem("token"),
+      user: JSON.parse(localStorage.getItem("user")),
+    },
+  },
   composeWithDevTools(applyMiddleware(reduxThunk))
 );
 

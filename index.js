@@ -9,7 +9,11 @@ require("./models/User");
 require("./models/Post");
 require("./services/passport");
 
-mongoose.connect(keys.mongoURI, { useNewUrlParser: true });
+mongoose.connect(keys.mongoURI, { useNewUrlParser: true }, function (err) {
+  if (err) {
+    console.log("*Can't connect to server.*");
+  }
+});
 
 const app = express();
 

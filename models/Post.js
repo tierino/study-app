@@ -4,8 +4,6 @@ const { Schema } = mongoose;
 const postSchema = new Schema({
   author: Object,
   content: String,
-  replyingTo: Object,
-  likes: Array,
   comments: Array,
   date: Number,
 });

@@ -1,9 +1,7 @@
 const passport = require("passport");
 const mongoose = require("mongoose");
 const keys = require("../config/keys");
-
-// Pulling the 'User' model class out of mongoose as an object
-const User = mongoose.model("users");
+const User = require("../models/User");
 
 module.exports = (app) => {
   /* --- FOLLOW ACCOUNT --- */
