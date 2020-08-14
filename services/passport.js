@@ -5,11 +5,8 @@ const JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJwt = require("passport-jwt").ExtractJwt;
 const LocalStrategy = require("passport-local");
 
+const User = require("../models/User");
 const keys = require("../config/keys");
-
-/******************
- * GOOGLE STRATEGY
- ******************/
 
 // User model instance --> ID
 passport.serializeUser((user, done) => {
@@ -23,6 +20,10 @@ passport.deserializeUser((id, done) => {
     done(null, user);
   });
 });
+
+/******************
+ * GOOGLE STRATEGY
+ ******************/
 
 passport.use(
   new GoogleStrategy(
@@ -51,35 +52,39 @@ passport.use(
 /******************
  * LOCAL STRATEGY
  ******************/
-const localOptions = { emailField: "email" }; // Says to look at email property to find email
+const localOptions = { usernameField: "email" }; // Says to look at email property to find username
 const localLogin = new LocalStrategy(localOptions, function (
   email,
   password,
   done
 ) {
-  // Verify this email and password
-  User.findOne({ email: email }, function (err, user) {
-    if (err) {
-      return done(err);
-    }
-    // User not found
-    if (!user) {
-      return done(null, false);
-    }
-
-    // Compare passwords
-    user.comparePassword(password, function (err, isMatch) {
+  try {
+    // Verify this email and password
+    User.findOne({ email: email }, function (err, user) {
       if (err) {
         return done(err);
       }
-      // Password does not match
-      if (!isMatch) {
+      // User not found
+      if (!user) {
         return done(null, false);
       }
-      // User found and password matching
-      return done(null, user);
+
+      // Compare passwords
+      user.comparePassword(password, function (err, isMatch) {
+        if (err) {
+          return done(err);
+        }
+        // Password does not match
+        if (!isMatch) {
+          return done(null, false);
+        }
+        // User found and password matching
+        return done(null, user);
+      });
     });
-  });
+  } catch (e) {
+    console.log(e);
+  }
 });
 
 // Set up options for JWT Strategy

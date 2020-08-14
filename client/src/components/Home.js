@@ -77,7 +77,7 @@ function Home(props) {
 
   return (
     <div>
-      <p>Signed in as {props.user.username}</p>
+      <p>Signed in as {props.user.email}</p>
       <a href="/auth/signout">
         <button>Sign out</button>
       </a>
@@ -105,6 +105,13 @@ function Home(props) {
       {renderFollowing()}
       <p>Followers:</p>
       {renderFollowers()}
+      <button
+        onClick={() => {
+          axios.post("/auth/signin", { hi: "hello" });
+        }}
+      >
+        req.user
+      </button>
     </div>
   );
 }

@@ -34,11 +34,15 @@ module.exports = (app) => {
 
   app.post("/auth/signin", requireSignin, Authentication.signin);
 
+  // app.post("/auth/signin", (req, res) => {
+  //   // res.send(req.user);
+  //   console.log("USER:", req.user);
+  // });
+
   app.post("/auth/signup", Authentication.signup);
 
   app.get("/users/current_user", (req, res) => {
     res.send(req.user);
-    console.log(req.user);
   });
 
   app.get("/auth/signout", (req, res) => {

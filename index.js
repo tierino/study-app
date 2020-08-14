@@ -17,6 +17,7 @@ mongoose.connect(keys.mongoURI, { useNewUrlParser: true }, function (err) {
 
 const app = express();
 
+app.use(bodyParser.json());
 app.use(
   cookieSession({
     maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days in ms
@@ -25,7 +26,6 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(bodyParser.json({ type: "*/*" }));
 
 // Call routing functions with 'app' object
 require("./routes/authRoutes")(app);
