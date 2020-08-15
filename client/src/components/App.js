@@ -22,14 +22,12 @@ const App = (props) => {
   }
 
   return (
-    <div>
-      <BrowserRouter>
-        <Route exact path="/" component={Welcome}></Route>
-        <Route exact path="/home" component={Home}></Route>
-        <Route exact path="/signin" component={Signin}></Route>
-        <Route exact path="/signup" component={Signup}></Route>
-      </BrowserRouter>
-    </div>
+    <BrowserRouter>
+      <Route exact path="/" component={Welcome}></Route>
+      <Route exact path="/home" component={Home}></Route>
+      <Route exact path="/signin" component={Signin}></Route>
+      <Route exact path="/signup" component={Signup}></Route>
+    </BrowserRouter>
   );
 };
 

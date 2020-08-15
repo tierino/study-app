@@ -12,8 +12,7 @@ export default (state = initialState, { type, payload }) => {
     case AUTH_USER:
       return {
         ...state,
-        user: payload.user,
-        token: payload.token,
+        user: payload,
       };
     case AUTH_ERROR:
       return {

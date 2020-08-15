@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { reduxForm, Field } from "redux-form";
+import { useHistory } from "react-router-dom";
 import { compose } from "redux";
 import { connect } from "react-redux";
 
@@ -11,7 +12,7 @@ function Signin(props) {
     if (props.user) {
       props.history.push("/home");
     }
-  }, [props.history, props.user]);
+  }, []);
 
   function onSubmit(formProps) {
     props.signin(formProps, () => {
@@ -41,7 +42,7 @@ function Signin(props) {
 }
 
 function mapStateToProps(state) {
-  return { error: state.auth.error };
+  return { user: state.auth.user, error: state.auth.error };
 }
 
 export default compose(

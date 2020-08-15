@@ -8,13 +8,13 @@ import { fetchUser } from "../actions";
 import requireAuth from "./requireAuth";
 
 function Home(props) {
-  async function handleUsernameChange(e) {
+  async function handleNameChange(e) {
     e.preventDefault();
-    const newUsername = e.target[0].value;
+    const newName = e.target[0].value;
 
-    if (newUsername.trim().length > 0) {
-      const response = await axios.post("/account/changeUsername", {
-        newUsername,
+    if (newName.trim().length > 0) {
+      const response = await axios.post("/account/changeName", {
+        newName,
       });
       console.log(response);
       props.fetchUser();
@@ -77,41 +77,15 @@ function Home(props) {
 
   return (
     <div>
-      <p>Signed in as {props.user.email}</p>
+      <p>Hello, {props.user.givenName}.</p>
       <a href="/auth/signout">
         <button>Sign out</button>
       </a>
-      <form onSubmit={handleUsernameChange}>
-        <p>Enter new username:</p>
+      <form onSubmit={handleNameChange}>
+        <p>Enter new name:</p>
         <input></input>
         <button>Change</button>
       </form>
-      <form onSubmit={handleFollow}>
-        <p>Enter the username of the account to follow:</p>
-        <input></input>
-        <button>Follow</button>
-      </form>
-      <form onSubmit={handleUnfollow}>
-        <p>Enter the username of the account to unfollow:</p>
-        <input></input>
-        <button>Unfollow</button>
-      </form>
-      <form onSubmit={createPost}>
-        <p>Create a new post:</p>
-        <input></input>
-        <button>Post</button>
-      </form>
-      <p>Following:</p>
-      {renderFollowing()}
-      <p>Followers:</p>
-      {renderFollowers()}
-      <button
-        onClick={() => {
-          axios.post("/auth/signin", { hi: "hello" });
-        }}
-      >
-        req.user
-      </button>
     </div>
   );
 }

@@ -4,9 +4,10 @@ const bcrypt = require("bcrypt-nodejs");
 
 // Define user model
 const userSchema = new Schema({
-  googleId: String,
+  googleId: String || null,
   email: { type: String, unique: true, lowercase: true },
-  password: String,
+  givenName: String,
+  password: String || null,
   following: Array,
   followers: Array,
   posts: Array,

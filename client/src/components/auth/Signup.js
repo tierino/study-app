@@ -22,6 +22,10 @@ function Signup(props) {
   return (
     <form onSubmit={props.handleSubmit(onSubmit)}>
       <fieldset>
+        <label>First name</label>
+        <Field name="name" type="text" component="input" autoComplete="off" />
+      </fieldset>
+      <fieldset>
         <label>Email</label>
         <Field name="email" type="text" component="input" autoComplete="off" />
       </fieldset>
@@ -41,9 +45,8 @@ function Signup(props) {
 }
 
 function mapStateToProps(state) {
-  return { error: state.auth.error };
+  return { user: state.auth.user, error: state.auth.error };
 }
-
 export default compose(
   connect(mapStateToProps, actions),
   reduxForm({ form: "signup" })

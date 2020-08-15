@@ -1,8 +1,5 @@
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const mongoose = require("mongoose");
-const JwtStrategy = require("passport-jwt").Strategy;
-const ExtractJwt = require("passport-jwt").ExtractJwt;
 const LocalStrategy = require("passport-local");
 
 const User = require("../models/User");
@@ -34,7 +31,9 @@ passport.use(
       proxy: true,
     },
     async (accessToken, refreshToken, profile, done) => {
-      const existingUser = await User.findOne({ googleId: profile.id });
+      const existingUser = await User.findOne({
+        googleId: profile.id,
+      });
       if (existingUser) {
         // User already exists
         // Call done with the found user
@@ -42,7 +41,11 @@ passport.use(
       } else {
         // Make a new user
         // Call done with the new user
-        const user = await new User({ googleId: profile.id }).save();
+        const user = await new User({
+          googleId: profile.id,
+          email: profile.emails[0].value,
+          givenName: profile.name.givenName,
+        }).save();
         done(null, user);
       }
     }
@@ -52,65 +55,78 @@ passport.use(
 /******************
  * LOCAL STRATEGY
  ******************/
-const localOptions = { usernameField: "email" }; // Says to look at email property to find username
-const localLogin = new LocalStrategy(localOptions, function (
-  email,
-  password,
-  done
-) {
-  try {
-    // Verify this email and password
-    User.findOne({ email: email }, function (err, user) {
-      if (err) {
-        return done(err);
-      }
-      // User not found
-      if (!user) {
-        return done(null, false);
-      }
 
-      // Compare passwords
-      user.comparePassword(password, function (err, isMatch) {
+// SIGN IN
+passport.use(
+  new LocalStrategy({ usernameField: "email" }, function (
+    email,
+    password,
+    done
+  ) {
+    try {
+      // Verify this email and password
+      User.findOne({ email: email }, function (err, user) {
         if (err) {
           return done(err);
         }
-        // Password does not match
-        if (!isMatch) {
+        // User not found
+        if (!user) {
           return done(null, false);
         }
-        // User found and password matching
-        return done(null, user);
+
+        // Compare passwords
+        user.comparePassword(password, function (err, isMatch) {
+          if (err) {
+            return done(err);
+          }
+          // Password does not match
+          if (!isMatch) {
+            return done(null, false);
+          }
+          // User found and password matching
+          return done(null, user);
+        });
       });
-    });
-  } catch (e) {
-    console.log(e);
-  }
-});
-
-// Set up options for JWT Strategy
-const jwtOptions = {
-  // Attempt to get token from a header called 'authorization'
-  jwtFromRequest: ExtractJwt.fromHeader("authorization"),
-  secretOrKey: keys.jwtSecret,
-};
-
-// Create JWT Strategy
-const jwtLogin = new JwtStrategy(jwtOptions, function (payload, done) {
-  // See if the user ID in the payload exists in our db
-  User.findById(payload.sub, function (err, user) {
-    if (err) {
-      return done(err, false);
+    } catch (e) {
+      console.log(e);
     }
-    if (user) {
-      // If user exists, call 'done' with that user - authenticated
-      done(null, user);
-    } else {
-      // Else, call 'done' without a user object - not authenticated
-      done(null, false);
-    }
-  });
-});
+  })
+);
 
-// Tell passport to use this strategy
-passport.use(jwtLogin);
-passport.use(localLogin);
+// passport.use(localLogin);
+
+// SIGN UP
+passport.use(
+  "local-signup",
+  new LocalStrategy(
+    {
+      usernameField: "email",
+      passwordField: "password",
+      passReqToCallback: true,
+    },
+    function (req, email, password, done) {
+      // find a user whose email is the same as the forms email
+      // we are checking to see if the user trying to login already exists
+      User.findOne({ email: email }, function (err, user) {
+        if (err) return done(err);
+
+        // If a user with email does exist, return an error
+        if (user) {
+          return res.status(422).send({ error: "Email is in use" });
+        }
+
+        // Else, create and save user record
+        user = new User({
+          email: email,
+          password: password,
+          givenName: req.body.name,
+        });
+
+        user.save(function (err) {
+          if (err) throw err;
+          return done(null, user);
+        });
+      });
+    }
+  )
+);

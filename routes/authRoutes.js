@@ -1,10 +1,4 @@
 const passport = require("passport");
-const mongoose = require("mongoose");
-const keys = require("../config/keys");
-
-const Authentication = require("../controllers/authentication");
-const requireAuth = passport.authenticate("jwt", { session: false });
-const requireSignin = passport.authenticate("local", { session: false });
 
 module.exports = (app) => {
   /***********************
@@ -32,14 +26,21 @@ module.exports = (app) => {
    * LOCAL AUTHENTICATION
    ***********************/
 
-  app.post("/auth/signin", requireSignin, Authentication.signin);
+  app.post("/auth/signin", passport.authenticate("local"), (req, res) => {
+    res.send(req.user);
+  });
 
-  // app.post("/auth/signin", (req, res) => {
-  //   // res.send(req.user);
-  //   console.log("USER:", req.user);
-  // });
+  app.post(
+    "/auth/signup",
+    passport.authenticate("local-signup"),
+    (req, res) => {
+      res.send(req.user);
+    }
+  );
 
-  app.post("/auth/signup", Authentication.signup);
+  /**********************
+   * OTHER
+   ***********************/
 
   app.get("/users/current_user", (req, res) => {
     res.send(req.user);
