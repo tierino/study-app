@@ -1,2 +1,2 @@
 # passport-auth
-Simple authentication client and server with Passport. Users can sign up or sign in locally, or through Google OAuth.
+Full stack authentication client and server using Passport. Includes a local strategy for local login or registration, and a Google strategy to log in via OAuth.
