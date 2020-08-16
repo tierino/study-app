@@ -3,9 +3,9 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import axios from "axios";
-import { fetchUser } from "../actions";
+import { fetchUser } from "../../actions";
 
-import requireAuth from "./requireAuth";
+import requireAuth from "../requireAuth";
 
 function Home(props) {
   async function handleNameChange(e) {
