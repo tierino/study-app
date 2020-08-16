@@ -32,7 +32,7 @@ app.get("/", (req, res) => {
 
 // Call routing functions with 'app' object
 require("./routes/authRoutes")(app);
-require("./routes/followRoutes")(app);
+require("./routes/unitRoutes")(app);
 require("./routes/accountRoutes")(app);
 
 const PORT = process.env.PORT || 5000;

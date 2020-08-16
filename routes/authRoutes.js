@@ -42,10 +42,6 @@ module.exports = (app) => {
    * OTHER
    ***********************/
 
-  app.get("/users/current_user", (req, res) => {
-    res.send(req.user);
-  });
-
   app.get("/auth/signout", (req, res) => {
     req.logout();
     res.redirect("/");

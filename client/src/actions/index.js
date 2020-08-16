@@ -3,7 +3,7 @@ import { FETCH_USER, AUTH_USER, AUTH_ERROR } from "./types";
 
 export const fetchUser = () => async (dispatch) => {
   console.log("fetching user...");
-  const response = await axios.get("/users/current_user");
+  const response = await axios.get("/account/user");
   console.log("response: ", response);
 
   dispatch({ type: FETCH_USER, payload: response.data });

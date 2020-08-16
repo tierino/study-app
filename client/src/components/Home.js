@@ -13,7 +13,7 @@ function Home(props) {
     const newName = e.target[0].value;
 
     if (newName.trim().length > 0) {
-      const response = await axios.post("/account/changeName", {
+      const response = await axios.post("/account/change_name", {
         newName,
       });
       console.log(response);
@@ -21,58 +21,23 @@ function Home(props) {
     }
   }
 
-  async function handleFollow(e) {
+  async function handleAddUnit(e) {
     e.preventDefault();
-    const followedUsername = e.target[0].value;
+    const unitName = e.target[0].value;
 
-    if (followedUsername.trim().length > 0) {
-      const response = await axios.post("/follows/add", {
-        followedUsername,
+    if (unitName.trim().length > 0) {
+      const response = await axios.post("/units/add", {
+        name: unitName,
       });
       console.log(response);
       props.fetchUser();
     }
   }
 
-  async function handleUnfollow(e) {
-    e.preventDefault();
-    const unfollowedUsername = e.target[0].value;
-
-    if (unfollowedUsername.trim().length > 0) {
-      const response = await axios.post("/follows/remove", {
-        unfollowedUsername,
-      });
-      console.log(response);
-      props.fetchUser();
-    }
-  }
-
-  async function createPost(e) {
-    e.preventDefault();
-    const content = e.target[0].value;
-
-    if (content.trim().length > 0) {
-      const response = await axios.post("/posts/create", {
-        content,
-      });
-      console.log(response);
-    }
-  }
-
-  function renderFollowing() {
-    if (props.user.following) {
-      return props.user.following.map((account) => {
-        return <ul key={account.id}>{account.username}</ul>;
-      });
-    }
-  }
-
-  function renderFollowers() {
-    if (props.user.followers) {
-      return props.user.followers.map((account) => {
-        return <ul key={account.id}>{account.username}</ul>;
-      });
-    }
+  function renderUnits() {
+    return props.user.units.map((unit) => {
+      return <ul key={unit.name}>{unit.name}</ul>;
+    });
   }
 
   return (
@@ -86,6 +51,13 @@ function Home(props) {
         <input></input>
         <button>Change</button>
       </form>
+      <form onSubmit={handleAddUnit}>
+        <p>Add a unit:</p>
+        <input></input>
+        <button>Add</button>
+      </form>
+      <p>Your units:</p>
+      {renderUnits()}
     </div>
   );
 }

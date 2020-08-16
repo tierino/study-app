@@ -4,7 +4,7 @@ const keys = require("../config/keys");
 const User = require("../models/User");
 
 module.exports = (app) => {
-  app.post("/account/changeName", (req, res) => {
+  app.post("/account/change_name", (req, res) => {
     const newName = req.body.newName;
     const id = req.user._id;
 
@@ -16,5 +16,9 @@ module.exports = (app) => {
     }
 
     changeName();
+  });
+
+  app.get("/account/user", (req, res) => {
+    res.send(req.user);
   });
 };

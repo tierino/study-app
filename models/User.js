@@ -8,9 +8,7 @@ const userSchema = new Schema({
   email: { type: String, unique: true, lowercase: true },
   givenName: String,
   password: String || null,
-  following: Array,
-  followers: Array,
-  posts: Array,
+  units: Array,
 });
 
 // On Save Hook, encrypt password
