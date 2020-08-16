@@ -1,5 +1,5 @@
 import axios from "axios";
-import { FETCH_USER, AUTH_USER, AUTH_ERROR } from "./types";
+import { FETCH_USER, AUTH_USER, AUTH_ERROR, SELECT_UNIT } from "./types";
 
 export const fetchUser = () => async (dispatch) => {
   console.log("fetching user...");
@@ -20,15 +20,6 @@ export const signup = (formProps, callback) => async (dispatch) => {
   }
 };
 
-export const signout = () => {
-  localStorage.removeItem("user");
-
-  return {
-    type: AUTH_USER,
-    payload: "",
-  };
-};
-
 export const signin = (formProps, callback) => async (dispatch) => {
   try {
     const response = await axios.post("/auth/signin", formProps); //formProps has email and password
@@ -39,4 +30,11 @@ export const signin = (formProps, callback) => async (dispatch) => {
   } catch (e) {
     dispatch({ type: AUTH_ERROR, payload: "Invalid email or password." });
   }
+};
+
+export const selectUnit = (unit) => {
+  return {
+    type: SELECT_UNIT,
+    payload: unit,
+  };
 };

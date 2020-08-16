@@ -60,14 +60,28 @@ function AddUnit(props) {
     }
   }
 
+  function renderButton() {
+    if (props.type == "list") {
+      return (
+        <ListItem button onClick={handleClickOpen}>
+          <ListItemIcon>
+            <AddIcon />
+          </ListItemIcon>
+          <ListItemText>Add a new unit</ListItemText>
+        </ListItem>
+      );
+    } else {
+      return (
+        <Button variant="contained" onClick={handleClickOpen}>
+          Add a unit
+        </Button>
+      );
+    }
+  }
+
   return (
     <div>
-      <ListItem button onClick={handleClickOpen}>
-        <ListItemIcon>
-          <AddIcon />
-        </ListItemIcon>
-        <ListItemText>Add a new unit</ListItemText>
-      </ListItem>
+      {renderButton()}
       <Dialog
         open={open}
         onClose={handleClose}

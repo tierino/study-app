@@ -11,7 +11,28 @@ import Homee from "./dashboard/Homee";
 import Signin from "./auth/Signin";
 import Signup from "./auth/Signup";
 
+import { makeStyles } from "@material-ui/core/styles";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Container from "@material-ui/core/Container";
+
+const useStyles = makeStyles((theme) => ({
+  loading: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    top: " 50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    backgroundColor: "#424242",
+    width: "100vw",
+    height: "100vh",
+  },
+}));
+
 const App = (props) => {
+  const classes = useStyles();
+
   useEffect(() => {
     props.fetchUser();
   }, []);
@@ -31,7 +52,13 @@ const App = (props) => {
   if (props.user === undefined) {
     // What the user sees while the app is fetching auth state, i.e. checking
     // if they are signed in or not.
-    return <div>Loading...</div>;
+    return (
+      <ThemeProvider theme={theme}>
+        <div className={classes.loading}>
+          <CircularProgress />
+        </div>
+      </ThemeProvider>
+    );
   }
 
   return (

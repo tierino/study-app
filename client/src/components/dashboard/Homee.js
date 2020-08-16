@@ -1,10 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
+import axios from "axios";
 import { reduxForm, Field } from "redux-form";
 
 import requireAuth from "../requireAuth";
 import UnitList from "./UnitList";
-import { fetchUser } from "../../actions";
+import AddUnit from "./AddUnit";
+import { fetchUser, selectUnit } from "../../actions";
 
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
@@ -25,6 +27,7 @@ import Link from "@material-ui/core/Link";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import NotificationsIcon from "@material-ui/icons/Notifications";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 function Copyright() {
   return (
@@ -123,6 +126,7 @@ const useStyles = makeStyles((theme) => ({
 function Homee(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -130,6 +134,12 @@ function Homee(props) {
     setOpen(false);
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+
+  async function handleDelete(name) {
+    await axios.post("/units/remove", { name: name });
+    props.selectUnit(props.user.units[0]);
+    props.fetchUser();
+  }
 
   return (
     <div className={classes.root}>
@@ -192,7 +202,28 @@ function Homee(props) {
           <Grid container spacing={3}>
             {/* Chart */}
             <Grid item xs={12} md={8} lg={9}>
-              <Paper className={fixedHeightPaper}>MAIN</Paper>
+              <Paper className={fixedHeightPaper}>
+                {props.user.units.length > 0 ? (
+                  <div>
+                    <Typography variant="h4">
+                      {props.selectedUnit.name}
+                    </Typography>
+                    <Typography>
+                      {JSON.stringify(props.selectedUnit)}
+                    </Typography>
+                    <IconButton
+                      onClick={() => handleDelete(props.selectedUnit.name)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </div>
+                ) : (
+                  <div>
+                    <Typography>You have no units</Typography>
+                    <AddUnit />
+                  </div>
+                )}
+              </Paper>
             </Grid>
             {/* Recent Deposits */}
             <Grid item xs={12} md={4} lg={3}>
@@ -215,8 +246,11 @@ function Homee(props) {
 function mapStateToProps(state) {
   return {
     user: state.auth.user,
+    selectedUnit: state.selectedUnit,
   };
 }
 
 // Wrap in requireAuth HOC
-export default connect(mapStateToProps, { fetchUser })(requireAuth(Homee));
+export default connect(mapStateToProps, { fetchUser, selectUnit })(
+  requireAuth(Homee)
+);
