@@ -3,20 +3,25 @@ import { reduxForm, Field } from "redux-form";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import axios from "axios";
+import "date-fns";
+import DateFnsUtils from "@date-io/date-fns";
 
 import { fetchUser, selectUnit } from "../../actions";
 
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import AddIcon from "@material-ui/icons/Add";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
+import Typography from "@material-ui/core/Typography";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import Grid from "@material-ui/core/Grid";
+import {
+  MuiPickersUtilsProvider,
+  KeyboardTimePicker,
+  KeyboardDatePicker,
+} from "@material-ui/pickers";
 
 const MAX_NAME_LEN = 20;
 
@@ -39,8 +44,34 @@ const renderTextField = ({
   />
 );
 
+// Field renderer so Material-UI works with Redux Form
+const renderNumField = ({
+  label,
+  input,
+  meta: { touched, invalid, error },
+  ...custom
+}) => (
+  <TextField
+    label={label}
+    type="number"
+    fullWidth
+    margin="normal"
+    placeholder={label}
+    error={touched && invalid}
+    helperText={touched && error}
+    {...input}
+    {...custom}
+  />
+);
+
 function AddAssessment(props) {
+  // Local state
   const [open, setOpen] = React.useState(false);
+  const [selectedDate, setSelectedDate] = React.useState(Date.now());
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+  };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -51,14 +82,13 @@ function AddAssessment(props) {
   };
 
   async function onSubmit(formProps) {
-    const { unitName, assessmentName, weight, dueDate } = formProps;
-    if (unitName.trim().length > 0) {
+    const { assessmentName, weight } = formProps;
+    if (assessmentName && weight) {
       await axios.post("/units/add_assessment", {
-        unit: unitName,
+        unit: props.selectedUnit.name,
         name: assessmentName,
         weight,
-        dueDate,
-        isComplete: false,
+        dueDate: selectedDate,
       });
       props.fetchUser();
     }
@@ -75,17 +105,41 @@ function AddAssessment(props) {
         aria-labelledby="form-dialog-title"
       >
         <form onSubmit={props.handleSubmit(onSubmit)}>
-          <DialogTitle id="form-dialog-title">Add a new unit</DialogTitle>
+          <DialogTitle id="form-dialog-title">Add an assessment</DialogTitle>
           <DialogContent>
             <Field
-              name="unitName"
+              name="assessmentName"
               component={renderTextField}
-              label="Unit name"
+              label="Name"
               autoComplete="off"
               inputProps={{
                 maxLength: MAX_NAME_LEN,
               }}
               autoFocus
+              required
+            />
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <Grid container justify="space-around">
+                <KeyboardDatePicker
+                  disableToolbar
+                  variant="inline"
+                  format="MM/dd/yyyy"
+                  margin="normal"
+                  id="date-picker-inline"
+                  label="Due date"
+                  value={selectedDate}
+                  onChange={handleDateChange}
+                  KeyboardButtonProps={{
+                    "aria-label": "change date",
+                  }}
+                />
+              </Grid>
+            </MuiPickersUtilsProvider>
+            <Field
+              name="weight"
+              component={renderNumField}
+              label="Weighting (%)"
+              autoComplete="off"
               required
             />
           </DialogContent>
@@ -104,7 +158,11 @@ function AddAssessment(props) {
 }
 
 function mapStateToProps(state) {
-  return { user: state.auth.user, error: state.auth.error };
+  return {
+    user: state.auth.user,
+    error: state.auth.error,
+    selectedUnit: state.selectedUnit,
+  };
 }
 
 export default compose(

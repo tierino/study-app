@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import axios from "axios";
 
+import AddAssessment from "./AddAssessment";
 import { fetchUser, selectUnit } from "../../actions";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -34,6 +35,7 @@ function DetailView(props) {
       <Typography>Current grade: {props.unit.currentGrade}</Typography>
       <Typography>Unit progress: {props.unit.progress}</Typography>
       <Typography>Assessments: {props.unit.assessments}</Typography>
+      <AddAssessment />
       <Button variant="contained" onClick={() => handleDelete(props.unit.name)}>
         Delete
       </Button>

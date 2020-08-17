@@ -26,17 +26,17 @@ module.exports = (app) => {
   // Add an assessment to a unit
   app.post("/units/add_assessment", (req, res) => {
     // Username of the user being followed
-    const { assessment } = req.body;
+    const { unit, name, weight, dueDate } = req.body;
 
     async function addUnit() {
       // Get the model of the user being followed
       const response = await User.findByIdAndUpdate(req.user._id, {
         $addToSet: {
           assessments: {
-            unit: assessment.unit,
-            name: assessment.name,
-            weight: assessment.weight,
-            dueDate: assessment.dueDate,
+            unit,
+            name,
+            weight,
+            dueDate,
             isComplete: false,
           },
         },
