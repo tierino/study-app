@@ -6,6 +6,8 @@ import { reduxForm, Field } from "redux-form";
 import requireAuth from "../requireAuth";
 import UnitList from "./UnitList";
 import AddUnit from "./AddUnit";
+import DetailView from "./DetailView";
+import AccountMenu from "./AccountMenu";
 import { fetchUser, selectUnit } from "../../actions";
 
 import clsx from "clsx";
@@ -28,19 +30,6 @@ import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import DeleteIcon from "@material-ui/icons/Delete";
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
 
 const drawerWidth = 240;
 
@@ -119,7 +108,10 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
   },
   fixedHeight: {
-    height: 240,
+    height: 480,
+  },
+  halfHeight: {
+    height: 228,
   },
 }));
 
@@ -134,12 +126,7 @@ function Homee(props) {
     setOpen(false);
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-
-  async function handleDelete(name) {
-    await axios.post("/units/remove", { name: name });
-    props.selectUnit(props.user.units[0]);
-    props.fetchUser();
-  }
+  const halfHeightPaper = clsx(classes.paper, classes.halfHeight);
 
   return (
     <div className={classes.root}>
@@ -170,11 +157,7 @@ function Homee(props) {
           >
             Study App
           </Typography>
-          <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
+          <AccountMenu />
         </Toolbar>
       </AppBar>
       <Drawer
@@ -201,42 +184,32 @@ function Homee(props) {
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
             {/* Chart */}
-            <Grid item xs={12} md={8} lg={9}>
+            <Grid item xs={12} md={7} lg={8}>
               <Paper className={fixedHeightPaper}>
                 {props.user.units.length > 0 ? (
-                  <div>
-                    <Typography variant="h4">
-                      {props.selectedUnit.name}
-                    </Typography>
-                    <Typography>
-                      {JSON.stringify(props.selectedUnit)}
-                    </Typography>
-                    <IconButton
-                      onClick={() => handleDelete(props.selectedUnit.name)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </div>
+                  <DetailView />
                 ) : (
                   <div>
-                    <Typography>You have no units</Typography>
+                    <Typography>Get started by adding some units</Typography>
                     <AddUnit />
                   </div>
                 )}
               </Paper>
             </Grid>
             {/* Recent Deposits */}
-            <Grid item xs={12} md={4} lg={3}>
-              <Paper className={fixedHeightPaper}>UPCOMING</Paper>
-            </Grid>
-            {/* Recent Orders */}
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>OVERVIEW</Paper>
+            <Grid item xs={12} md={5} lg={4}>
+              <Grid container direction="column" spacing={3}>
+                <Grid item xs={12}>
+                  <Paper className={halfHeightPaper}>UPCOMING</Paper>
+                </Grid>
+                {/* Recent Orders */}
+                <Grid item xs={12}>
+                  <Paper className={halfHeightPaper}>OVERVIEW</Paper>
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
-          <Box pt={4}>
-            <Copyright />
-          </Box>
+          <Box pt={4}></Box>
         </Container>
       </main>
     </div>

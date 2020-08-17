@@ -1,6 +1,6 @@
 import { SELECT_UNIT } from "../actions/types";
 
-const initialState = {};
+const initialState = null;
 
 export default (state = initialState, { type, payload }) => {
   switch (type) {

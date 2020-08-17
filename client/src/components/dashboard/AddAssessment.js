@@ -39,7 +39,7 @@ const renderTextField = ({
   />
 );
 
-function AddUnit(props) {
+function AddAssessment(props) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -51,37 +51,24 @@ function AddUnit(props) {
   };
 
   async function onSubmit(formProps) {
-    const { unitName } = formProps;
+    const { unitName, assessmentName, weight, dueDate } = formProps;
     if (unitName.trim().length > 0) {
-      await axios.post("/units/add", {
-        name: unitName,
+      await axios.post("/units/add_assessment", {
+        unit: unitName,
+        name: assessmentName,
+        weight,
+        dueDate,
+        isComplete: false,
       });
       props.fetchUser();
     }
   }
 
-  function renderButton() {
-    if (props.type == "list") {
-      return (
-        <ListItem button onClick={handleClickOpen}>
-          <ListItemIcon>
-            <AddIcon />
-          </ListItemIcon>
-          <ListItemText>Add a new unit</ListItemText>
-        </ListItem>
-      );
-    } else {
-      return (
-        <Button variant="contained" onClick={handleClickOpen}>
-          Add a unit
-        </Button>
-      );
-    }
-  }
-
   return (
     <div>
-      {renderButton()}
+      <Button variant="contained" onClick={handleClickOpen}>
+        Add an assessment
+      </Button>
       <Dialog
         open={open}
         onClose={handleClose}
@@ -122,5 +109,5 @@ function mapStateToProps(state) {
 
 export default compose(
   connect(mapStateToProps, { fetchUser, selectUnit }),
-  reduxForm({ form: "addUnit" })
-)(AddUnit);
+  reduxForm({ form: "addAssessment" })
+)(AddAssessment);

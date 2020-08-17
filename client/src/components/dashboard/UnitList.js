@@ -31,10 +31,10 @@ function UnitList(props) {
   const classes = useStyles();
 
   function truncate(str) {
-    if (str.length <= 10) {
+    if (str.length <= 12) {
       return str;
     }
-    return str.slice(0, 10) + "...";
+    return str.slice(0, 12) + "...";
   }
 
   function handleDelete(name) {
