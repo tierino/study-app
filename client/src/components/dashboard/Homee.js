@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import axios from "axios";
 import { reduxForm, Field } from "redux-form";
@@ -118,6 +118,10 @@ const useStyles = makeStyles((theme) => ({
 function Homee(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
+
+  useEffect(() => {
+    props.selectUnit(props.user.units[props.user.units.length - 1]);
+  }, [props.user.units.length]);
 
   const handleDrawerOpen = () => {
     setOpen(true);

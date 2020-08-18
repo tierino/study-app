@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import axios from "axios";
 
@@ -16,9 +16,18 @@ const useStyles = makeStyles((theme) => ({
 function DetailView(props) {
   const classes = useStyles();
 
+  const [assessments, setAssessments] = useState([]);
+
   useEffect(() => {
-    props.selectUnit(props.user.units[props.user.units.length - 1]);
-  }, [props.user.units.length]);
+    if (props.unit) {
+      setAssessments(
+        props.user.assessments.filter((assessment) => {
+          return assessment.unit === props.unit.name;
+        })
+      );
+    }
+    console.log(assessments);
+  }, [props.unit]);
 
   async function handleDelete(name) {
     await axios.post("/units/remove", { name: name });
@@ -34,7 +43,12 @@ function DetailView(props) {
       <Typography variant="h4">{props.unit.name}</Typography>
       <Typography>Current grade: {props.unit.currentGrade}</Typography>
       <Typography>Unit progress: {props.unit.progress}</Typography>
-      <Typography>Assessments: {props.unit.assessments}</Typography>
+      <Typography>
+        Assessments:{" "}
+        {assessments.map((assessment) => {
+          return <div>{assessment.name}</div>;
+        })}
+      </Typography>
       <AddAssessment />
       <Button variant="contained" onClick={() => handleDelete(props.unit.name)}>
         Delete
