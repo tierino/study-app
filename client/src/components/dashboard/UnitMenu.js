@@ -6,14 +6,16 @@ import Button from "@material-ui/core/Button";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Grow from "@material-ui/core/Grow";
 import Paper from "@material-ui/core/Paper";
-import SettingsIcon from "@material-ui/icons/Settings";
 import Popper from "@material-ui/core/Popper";
 import MenuItem from "@material-ui/core/MenuItem";
 import MenuList from "@material-ui/core/MenuList";
-import Menu from "@material-ui/core/Menu";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { makeStyles } from "@material-ui/core/styles";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import Menu from "@material-ui/core/Menu";
+import IconButton from "@material-ui/core/IconButton";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
+import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import Avatar from "@material-ui/core/Avatar";
@@ -36,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
   },
   menu: {
     //marginTop: theme.spacing(5),
-    transform: "translateX(-0.5%) translateY(3.5%)",
+    transform: "translateX(-5%) translateY(4.5%)",
   },
   avatar: {
     marginRight: theme.spacing(2),
@@ -51,14 +53,14 @@ function AccountMenu(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   // Signout dialog state
-  const [signoutDialogOpen, setSignoutDialogOpen] = React.useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
 
-  const handleSignoutDialogOpen = (e) => {
-    setSignoutDialogOpen(true);
+  const handleDeleteDialogOpen = (e) => {
+    setDeleteDialogOpen(true);
   };
 
-  const handleSignoutDialogClose = (e) => {
-    setSignoutDialogOpen(false);
+  const handleDeleteDialogClose = (e) => {
+    setDeleteDialogOpen(false);
   };
 
   // Menu state
@@ -75,28 +77,27 @@ function AccountMenu(props) {
       <Dialog
         maxWidth="xs"
         fullWidth={true}
-        open={signoutDialogOpen}
-        onClose={handleSignoutDialogClose}
+        open={deleteDialogOpen}
+        onClose={handleDeleteDialogClose}
       >
-        <DialogTitle>Are you sure you want to sign out?</DialogTitle>
+        <DialogTitle>Delete this unit?</DialogTitle>
         <Divider />
         <DialogActions>
-          <Button onClick={handleSignoutDialogClose}>Cancel</Button>
+          <Button onClick={handleDeleteDialogClose}>Cancel</Button>
           <a href="/auth/signout" style={{ textDecoration: "none" }}>
             <Button variant="contained" color="secondary">
-              Sign out
+              Delete
             </Button>
           </a>
         </DialogActions>
       </Dialog>
-      <Button
-        startIcon={<AccountCircleIcon />}
+      <IconButton
         aria-controls="simple-menu"
         aria-haspopup="true"
         onClick={handleClick}
       >
-        {props.user.givenName}
-      </Button>
+        <MoreVertIcon />
+      </IconButton>
       <Menu
         className={classes.menu}
         id="simple-menu"
@@ -107,20 +108,20 @@ function AccountMenu(props) {
       >
         <MenuItem onClick={handleClose}>
           <ListItemIcon>
-            <SettingsIcon />
+            <EditIcon />
           </ListItemIcon>
-          My account
+          Rename
         </MenuItem>
         <MenuItem
           onClick={() => {
             handleClose();
-            handleSignoutDialogOpen();
+            handleDeleteDialogOpen();
           }}
         >
           <ListItemIcon>
-            <ExitToAppIcon color="secondary" />
+            <DeleteIcon color="secondary" />
           </ListItemIcon>
-          <Typography color="secondary">Sign out</Typography>
+          <Typography color="secondary">Delete</Typography>
         </MenuItem>
       </Menu>
     </div>

@@ -1,16 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import axios from "axios";
+import shortid from "shortid";
 
 import AddAssessment from "./AddAssessment";
+import UnitMenu from "./UnitMenu";
 import { fetchUser, selectUnit } from "../../actions";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
+import Divider from "@material-ui/core/Divider";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
+import IconButton from "@material-ui/core/IconButton";
 
 const useStyles = makeStyles((theme) => ({
-  root: {},
+  header: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
 }));
 
 function DetailView(props) {
@@ -20,14 +28,14 @@ function DetailView(props) {
 
   useEffect(() => {
     if (props.unit) {
+      // Could be a better/faster alternative but OK for now
       setAssessments(
         props.user.assessments.filter((assessment) => {
           return assessment.unit === props.unit.name;
         })
       );
     }
-    console.log(assessments);
-  }, [props.unit]);
+  }, [props.unit, props.user.assessments.length]);
 
   async function handleDelete(name) {
     await axios.post("/units/remove", { name: name });
@@ -40,13 +48,17 @@ function DetailView(props) {
 
   return (
     <div>
-      <Typography variant="h4">{props.unit.name}</Typography>
+      <div className={classes.header}>
+        <Typography variant="h4">{props.unit.name}</Typography>
+        <UnitMenu />
+      </div>
+      <Divider style={{ marginTop: "8px", marginBottom: "8px" }} />
       <Typography>Current grade: {props.unit.currentGrade}</Typography>
       <Typography>Unit progress: {props.unit.progress}</Typography>
       <Typography>
-        Assessments:{" "}
+        Assessments:
         {assessments.map((assessment) => {
-          return <div>{assessment.name}</div>;
+          return <li key={shortid.generate()}>{assessment.name}</li>;
         })}
       </Typography>
       <AddAssessment />

@@ -19,7 +19,6 @@ import DeleteIcon from "@material-ui/icons/Delete";
 const useStyles = makeStyles((theme) => ({
   small: {
     backgroundColor: "#fafafa",
-    //color: "white",
     fontWeight: "bold",
     width: theme.spacing(3),
     height: theme.spacing(3),
