@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import axios from "axios";
 import shortid from "shortid";
 
+import Assessment from "./Assessment";
 import AddAssessment from "./AddAssessment";
 import UnitMenu from "./UnitMenu";
 import { fetchUser, selectUnit } from "../../actions";
@@ -11,8 +12,13 @@ import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
+import DeleteIcon from "@material-ui/icons/Delete";
 import IconButton from "@material-ui/core/IconButton";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import ListItemText from "@material-ui/core/ListItemText";
+import Checkbox from "@material-ui/core/Checkbox";
 
 const useStyles = makeStyles((theme) => ({
   header: {
@@ -55,12 +61,10 @@ function DetailView(props) {
       <Divider style={{ marginTop: "8px", marginBottom: "8px" }} />
       <Typography>Current grade: {props.unit.currentGrade}</Typography>
       <Typography>Unit progress: {props.unit.progress}</Typography>
-      <Typography>
-        Assessments:
-        {assessments.map((assessment) => {
-          return <li key={shortid.generate()}>{assessment.name}</li>;
-        })}
-      </Typography>
+      <Typography>Assessments:</Typography>
+      {assessments.map((assessment) => {
+        return <Assessment key={shortid.generate()} assessment={assessment} />;
+      })}
       <AddAssessment />
       <Button variant="contained" onClick={() => handleDelete(props.unit.name)}>
         Delete

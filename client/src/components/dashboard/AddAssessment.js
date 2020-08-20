@@ -2,6 +2,7 @@ import React from "react";
 import { reduxForm, Field } from "redux-form";
 import { compose } from "redux";
 import { connect } from "react-redux";
+import shortid from "shortid";
 import axios from "axios";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
@@ -85,6 +86,7 @@ function AddAssessment(props) {
     const { assessmentName, weight } = formProps;
     if (assessmentName && weight) {
       await axios.post("/units/add_assessment", {
+        id: shortid.generate(),
         unit: props.selectedUnit.name,
         name: assessmentName,
         weight,

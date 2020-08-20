@@ -23,34 +23,9 @@ module.exports = (app) => {
     addUnit();
   });
 
-  // Add an assessment to a unit
-  app.post("/units/add_assessment", (req, res) => {
-    // Username of the user being followed
-    const { unit, name, weight, dueDate } = req.body;
-
-    async function addUnit() {
-      // Get the model of the user being followed
-      const response = await User.findByIdAndUpdate(req.user._id, {
-        $addToSet: {
-          assessments: {
-            unit,
-            name,
-            weight,
-            dueDate,
-            isComplete: false,
-          },
-        },
-      });
-
-      res.send(response);
-    }
-
-    addUnit();
-  });
-
   // Remove a unit
   app.post("/units/remove", (req, res) => {
-    // Username of the user being followed
+    // Destructure request
     const { name } = req.body;
 
     async function removeUnit() {
@@ -65,5 +40,72 @@ module.exports = (app) => {
     }
 
     removeUnit();
+  });
+
+  // Add an assessment to a unit
+  app.post("/units/add_assessment", (req, res) => {
+    // Destructure request
+    const { id, unit, name, weight, dueDate } = req.body;
+
+    async function addAssessment() {
+      // Get the model of the user being followed
+      const response = await User.findByIdAndUpdate(req.user._id, {
+        $addToSet: {
+          assessments: {
+            id,
+            unit,
+            name,
+            weight,
+            dueDate,
+            isComplete: false,
+          },
+        },
+      });
+
+      res.send(response);
+    }
+
+    addAssessment();
+  });
+
+  // Remove an assessment from a unit
+  app.post("/units/remove_assessment", (req, res) => {
+    const { assessmentName } = req.body;
+
+    async function removeAssessment() {
+      // Get the model of the user being followed
+      const response = await User.findByIdAndUpdate(req.user._id, {
+        $pull: {
+          assessments: {
+            name: req.body.assessmentName,
+          },
+        },
+      });
+
+      res.send(response);
+    }
+
+    removeAssessment();
+  });
+
+  // Remove an assessment from a unit
+  app.post("/units/toggle_assessment", (req, res) => {
+    const { assessmentId, toggleType } = req.body;
+
+    async function toggleAssessment() {
+      // Get the model of the user being followed
+      const response = await User.updateOne(
+        { "assessments.id": assessmentId },
+        {
+          $set: {
+            "assessments.$.isComplete": toggleType,
+          },
+        }
+      );
+
+      res.send(response);
+    }
+
+    toggleAssessment();
   });
 };

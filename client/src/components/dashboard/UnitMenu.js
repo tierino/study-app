@@ -1,6 +1,9 @@
 import React from "react";
+import axios from "axios";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+
+import { fetchUser } from "../../actions";
 
 import Button from "@material-ui/core/Button";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
@@ -52,25 +55,30 @@ function AccountMenu(props) {
 
   const [anchorEl, setAnchorEl] = React.useState(null);
 
-  // Signout dialog state
+  // Delete dialog state
   const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
 
-  const handleDeleteDialogOpen = (e) => {
+  function handleDeleteDialogOpen() {
     setDeleteDialogOpen(true);
-  };
+  }
 
-  const handleDeleteDialogClose = (e) => {
+  function handleDeleteDialogClose() {
     setDeleteDialogOpen(false);
-  };
+  }
 
   // Menu state
-  const handleClick = (event) => {
+  function handleClick(event) {
     setAnchorEl(event.currentTarget);
-  };
+  }
 
-  const handleClose = (event) => {
+  function handleClose() {
     setAnchorEl(null);
-  };
+  }
+
+  async function handleDelete(assessmentName) {
+    await axios.post("/units/delete_assessment", assessmentName);
+    props.fetchUser();
+  }
 
   return (
     <div className={classes.root}>
@@ -84,11 +92,9 @@ function AccountMenu(props) {
         <Divider />
         <DialogActions>
           <Button onClick={handleDeleteDialogClose}>Cancel</Button>
-          <a href="/auth/signout" style={{ textDecoration: "none" }}>
-            <Button variant="contained" color="secondary">
-              Delete
-            </Button>
-          </a>
+          <Button onClick={handleDelete} variant="contained" color="secondary">
+            Delete
+          </Button>
         </DialogActions>
       </Dialog>
       <IconButton
@@ -132,4 +138,4 @@ function mapStateToProps(state) {
   return { user: state.auth.user };
 }
 
-export default connect(mapStateToProps)(AccountMenu);
+export default connect(mapStateToProps, { fetchUser })(AccountMenu);

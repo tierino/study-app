@@ -53,22 +53,22 @@ function AccountMenu(props) {
   // Signout dialog state
   const [signoutDialogOpen, setSignoutDialogOpen] = React.useState(false);
 
-  const handleSignoutDialogOpen = (e) => {
+  function handleSignoutDialogOpen() {
     setSignoutDialogOpen(true);
-  };
+  }
 
-  const handleSignoutDialogClose = (e) => {
+  function handleSignoutDialogClose() {
     setSignoutDialogOpen(false);
-  };
+  }
 
   // Menu state
-  const handleClick = (event) => {
+  function handleClick(event) {
     setAnchorEl(event.currentTarget);
-  };
+  }
 
-  const handleClose = (event) => {
+  function handleClose(event) {
     setAnchorEl(null);
-  };
+  }
 
   return (
     <div className={classes.root}>
