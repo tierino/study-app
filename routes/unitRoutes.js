@@ -70,14 +70,14 @@ module.exports = (app) => {
 
   // Remove an assessment from a unit
   app.post("/units/remove_assessment", (req, res) => {
-    const { assessmentName } = req.body;
+    const { assessmentId } = req.body;
 
     async function removeAssessment() {
       // Get the model of the user being followed
       const response = await User.findByIdAndUpdate(req.user._id, {
         $pull: {
           assessments: {
-            name: req.body.assessmentName,
+            id: req.body.assessmentId,
           },
         },
       });
@@ -88,7 +88,7 @@ module.exports = (app) => {
     removeAssessment();
   });
 
-  // Remove an assessment from a unit
+  // Toggle an assessment's isComplete status
   app.post("/units/toggle_assessment", (req, res) => {
     const { assessmentId, toggleType } = req.body;
 

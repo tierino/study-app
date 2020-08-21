@@ -43,11 +43,6 @@ function DetailView(props) {
     }
   }, [props.unit, props.user.assessments.length]);
 
-  async function handleDelete(name) {
-    await axios.post("/units/remove", { name: name });
-    props.fetchUser();
-  }
-
   if (!props.unit) {
     return <div>No unit selected</div>;
   }
@@ -59,16 +54,19 @@ function DetailView(props) {
         <UnitMenu />
       </div>
       <Divider style={{ marginTop: "8px", marginBottom: "8px" }} />
-      <Typography>Current grade: {props.unit.currentGrade}</Typography>
-      <Typography>Unit progress: {props.unit.progress}</Typography>
-      <Typography>Assessments:</Typography>
-      {assessments.map((assessment) => {
-        return <Assessment key={shortid.generate()} assessment={assessment} />;
-      })}
+      <Typography variant="h6">
+        Current grade: {props.unit.currentGrade || "N/A"}
+      </Typography>
+      <Typography variant="h6">Unit progress: {props.unit.progress}</Typography>
+      <Typography variant="h6">Assessments</Typography>
+      <div id="assessment-list">
+        {assessments.map((assessment) => {
+          return (
+            <Assessment key={shortid.generate()} assessment={assessment} />
+          );
+        })}
+      </div>
       <AddAssessment />
-      <Button variant="contained" onClick={() => handleDelete(props.unit.name)}>
-        Delete
-      </Button>
     </div>
   );
 }

@@ -98,9 +98,7 @@ function AddAssessment(props) {
 
   return (
     <div>
-      <Button variant="contained" onClick={handleClickOpen}>
-        Add an assessment
-      </Button>
+      <Button onClick={handleClickOpen}>Add assessment</Button>
       <Dialog
         open={open}
         onClose={handleClose}
