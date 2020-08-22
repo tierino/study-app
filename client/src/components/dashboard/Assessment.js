@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { compose } from "redux";
 import { connect } from "react-redux";
 import axios from "axios";
+import { reduxForm, Field } from "redux-form";
 import shortid from "shortid";
 
 import AddAssessment from "./AddAssessment";
@@ -20,24 +22,67 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import ListItemText from "@material-ui/core/ListItemText";
 import Checkbox from "@material-ui/core/Checkbox";
+import Popover from "@material-ui/core/Popover";
+import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
+import Box from "@material-ui/core/Box";
+import Paper from "@material-ui/core/Paper";
+
+// Field renderer so Material-UI works with Redux Form
+const renderNumField = ({
+  label,
+  input,
+  meta: { touched, invalid, error },
+  ...custom
+}) => (
+  <TextField
+    label={label}
+    type="number"
+    fullWidth
+    margin="normal"
+    placeholder={label}
+    error={touched && invalid}
+    helperText={touched && error}
+    {...input}
+    {...custom}
+  />
+);
 
 function Assessment(props) {
   // isComplete state (component-level state for less laggy feel)
   const [complete, setComplete] = useState(props.assessment.isComplete);
 
-  const [open, setOpen] = React.useState(false);
+  // Popover state
+  const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleClick = (event) => {
+    if (complete) {
+      handleAssessmentToggle();
+    } else {
+      setAnchorEl(event.currentTarget);
+    }
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setAnchorEl(null);
   };
+
+  const open = Boolean(anchorEl);
+  const id = open ? "simple-popover" : undefined;
+
+  function handleGradeSubmit(formProps) {
+    // e.preventDefault();
+    const { grade } = formProps;
+    console.log(grade);
+    if (grade.trim().length > 0 && !isNaN(grade)) {
+      handleAssessmentToggle(props.assessment.id);
+    }
+    handleClose();
+  }
 
   function handleAssessmentToggle(id) {
     axios.post("/units/toggle_assessment", {
       assessmentId: id,
+      grade: null,
       toggleType: !complete,
     });
     // Invert complete
@@ -61,7 +106,8 @@ function Assessment(props) {
       <ListItem
         ContainerComponent="div"
         button
-        onClick={() => handleAssessmentToggle(props.assessment.id)}
+        onClick={handleClick}
+        // onClick={() => handleAssessmentToggle(props.assessment.id)}
         value={props.assessment.name}
       >
         <ListItemIcon>
@@ -70,19 +116,44 @@ function Assessment(props) {
         <ListItemText secondary={getSecondaryText()}>
           {props.assessment.name}
         </ListItemText>
-        <TextField
-          label="Grade"
-          variant="outlined"
-          style={{ marginRight: "24px" }}
-        ></TextField>
         <ListItemSecondaryAction>
           <IconButton onClick={() => handleDelete(props.assessment.id)}>
             <DeleteIcon />
           </IconButton>
         </ListItemSecondaryAction>
       </ListItem>
+      <Popover
+        id={id}
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "left",
+        }}
+      >
+        <Paper style={{ padding: "8px" }}>
+          <form onSubmit={props.handleSubmit(handleGradeSubmit)}>
+            <Field
+              name="grade"
+              component={renderNumField}
+              label="Grade"
+              autoComplete="off"
+              autoFocus
+            />
+            <Button type="submit">Ok</Button>
+          </form>
+        </Paper>
+      </Popover>
     </div>
   );
 }
 
-export default connect(null, { fetchUser })(Assessment);
+export default compose(
+  connect(null, { fetchUser }),
+  reduxForm({ form: "grade" })
+)(Assessment);
