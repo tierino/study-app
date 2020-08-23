@@ -34,6 +34,6 @@ export const signin = (formProps, callback) => async (dispatch) => {
 export const selectUnit = (unit) => {
   return {
     type: SELECT_UNIT,
-    payload: unit,
+    payload: unit || null,
   };
 };

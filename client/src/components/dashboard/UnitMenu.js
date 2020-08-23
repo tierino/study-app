@@ -75,8 +75,8 @@ function AccountMenu(props) {
     setAnchorEl(null);
   }
 
-  async function handleDelete(assessmentName) {
-    await axios.post("/units/delete_assessment", assessmentName);
+  async function handleDelete() {
+    await axios.post("/units/remove", { name: props.unit.name });
     props.fetchUser();
   }
 
@@ -112,7 +112,7 @@ function AccountMenu(props) {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={handleClose} disabled>
           <ListItemIcon>
             <EditIcon />
           </ListItemIcon>

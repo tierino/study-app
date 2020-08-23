@@ -15,6 +15,7 @@ import Button from "@material-ui/core/Button";
 import CheckIcon from "@material-ui/icons/Check";
 import Divider from "@material-ui/core/Divider";
 import TextField from "@material-ui/core/TextField";
+import InputAdornment from "@material-ui/core/InputAdornment";
 import DeleteIcon from "@material-ui/icons/Delete";
 import IconButton from "@material-ui/core/IconButton";
 import ListItem from "@material-ui/core/ListItem";
@@ -27,6 +28,23 @@ import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
 import Box from "@material-ui/core/Box";
 import Paper from "@material-ui/core/Paper";
 
+const useStyles = makeStyles((theme) => ({
+  gradeForm: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  gradeInput: {
+    margin: 0,
+  },
+  gradePaper: {
+    padding: theme.spacing(2),
+  },
+  gradeSubmitButton: {
+    marginLeft: theme.spacing(2),
+  },
+}));
+
 // Field renderer so Material-UI works with Redux Form
 const renderNumField = ({
   label,
@@ -35,6 +53,7 @@ const renderNumField = ({
   ...custom
 }) => (
   <TextField
+    variant="outlined"
     label={label}
     type="number"
     fullWidth
@@ -48,15 +67,23 @@ const renderNumField = ({
 );
 
 function Assessment(props) {
-  // isComplete state (component-level state for less laggy feel)
+  const classes = useStyles();
+
+  // A lot of the component-level state here is just to make the app feel
+  // smoother, rather than waiting on API requests to update certain data.
+
+  // isComplete state
   const [complete, setComplete] = useState(props.assessment.isComplete);
 
   // Popover state
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  // Grade state
+  const [grade, setGrade] = useState(props.assessment.grade);
 
   const handleClick = (event) => {
     if (complete) {
-      handleAssessmentToggle();
+      handleAssessmentToggle(props.assessment.id, null);
     } else {
       setAnchorEl(event.currentTarget);
     }
@@ -67,33 +94,36 @@ function Assessment(props) {
   };
 
   const open = Boolean(anchorEl);
-  const id = open ? "simple-popover" : undefined;
+  const id = open ? "grade-popover" : undefined;
 
   function handleGradeSubmit(formProps) {
-    // e.preventDefault();
-    const { grade } = formProps;
-    console.log(grade);
-    if (grade.trim().length > 0 && !isNaN(grade)) {
-      handleAssessmentToggle(props.assessment.id);
+    const { enteredGrade } = formProps;
+    if (enteredGrade) {
+      // Send the data to the toggle handler
+      setGrade(enteredGrade);
+      handleAssessmentToggle(props.assessment.id, enteredGrade);
     }
     handleClose();
   }
 
-  function handleAssessmentToggle(id) {
+  function handleAssessmentToggle(id, grade) {
+    // Toggle the assessment in the database
     axios.post("/units/toggle_assessment", {
       assessmentId: id,
-      grade: null,
+      grade,
       toggleType: !complete,
     });
-    // Invert complete
+    // And change component-level state
     setComplete(!complete);
+    setGrade(grade);
   }
 
   function getSecondaryText() {
     if (!complete) {
       return `${props.assessment.weight}%`;
+    } else {
+      return `${props.assessment.weight}% · Complete (${grade}%)`;
     }
-    return `${props.assessment.weight}% · Complete (${props.assessment.grade}%)`;
   }
 
   async function handleDelete(id) {
@@ -136,16 +166,30 @@ function Assessment(props) {
           horizontal: "left",
         }}
       >
-        <Paper style={{ padding: "8px" }}>
-          <form onSubmit={props.handleSubmit(handleGradeSubmit)}>
+        <Paper className={classes.gradePaper} variant="outlined">
+          <form
+            className={classes.gradeForm}
+            onSubmit={props.handleSubmit(handleGradeSubmit)}
+          >
             <Field
-              name="grade"
+              className={classes.gradeInput}
+              name="enteredGrade"
               component={renderNumField}
-              label="Grade"
+              label="Grade (%)"
               autoComplete="off"
               autoFocus
             />
-            <Button type="submit">Ok</Button>
+            <div>
+              <Button
+                className={classes.gradeSubmitButton}
+                color="primary"
+                variant="contained"
+                type="submit"
+                startIcon={<CheckIcon />}
+              >
+                Ok
+              </Button>
+            </div>
           </form>
         </Paper>
       </Popover>

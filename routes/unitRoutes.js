@@ -42,6 +42,25 @@ module.exports = (app) => {
     removeUnit();
   });
 
+  // Update a unit's grade
+  app.post("/units/update", (req, res) => {
+    const { name, grade } = req.body;
+
+    async function toggleAssessment() {
+      // Get the model of the user being followed
+      const response = await User.updateOne(
+        { "units.name": name },
+        {
+          $set: {
+            "units.$.grade": grade,
+          },
+        }
+      );
+      res.send(response);
+    }
+    toggleAssessment();
+  });
+
   // Add an assessment to a unit
   app.post("/units/add_assessment", (req, res) => {
     // Destructure request
@@ -58,6 +77,7 @@ module.exports = (app) => {
             weight,
             dueDate,
             isComplete: false,
+            grade: null,
           },
         },
       });
@@ -81,16 +101,14 @@ module.exports = (app) => {
           },
         },
       });
-
       res.send(response);
     }
-
     removeAssessment();
   });
 
   // Toggle an assessment's isComplete status
   app.post("/units/toggle_assessment", (req, res) => {
-    const { assessmentId, toggleType } = req.body;
+    const { assessmentId, grade, toggleType } = req.body;
 
     async function toggleAssessment() {
       // Get the model of the user being followed
@@ -98,14 +116,13 @@ module.exports = (app) => {
         { "assessments.id": assessmentId },
         {
           $set: {
+            "assessments.$.grade": grade,
             "assessments.$.isComplete": toggleType,
           },
         }
       );
-
       res.send(response);
     }
-
     toggleAssessment();
   });
 };

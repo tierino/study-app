@@ -31,33 +31,59 @@ function DetailView(props) {
   const classes = useStyles();
 
   const [assessments, setAssessments] = useState([]);
+  const [average, setAverage] = useState("N/A");
 
   useEffect(() => {
     if (props.unit) {
-      // Could be a better/faster alternative but OK for now
-      setAssessments(
-        props.user.assessments.filter((assessment) => {
-          return assessment.unit === props.unit.name;
-        })
-      );
+      async function getUnitData() {
+        await props.fetchUser();
+        // Could be a better/faster alternative but OK for now
+        setAssessments(
+          props.user.assessments.filter((assessment) => {
+            return assessment.unit === props.unit.name;
+          })
+        );
+        setAverage(calcAverage());
+      }
+      getUnitData();
     }
   }, [props.unit, props.user.assessments.length]);
 
+  function calcAverage() {
+    let sumWeights = 0;
+    let sumProducts = 0;
+
+    assessments.map((assessment) => {
+      if (assessment.isComplete) {
+        sumWeights += parseFloat(assessment.weight);
+      }
+    });
+
+    assessments.map((assessment) => {
+      if (assessment.isComplete) {
+        sumProducts +=
+          parseFloat(assessment.grade) * parseFloat(assessment.weight);
+      }
+    });
+
+    if (sumWeights > 0) {
+      return sumProducts / sumWeights;
+    }
+    return "N/A";
+  }
+
   if (!props.unit) {
-    return <div>No unit selected</div>;
+    return <Typography>No unit selected</Typography>;
   }
 
   return (
     <div>
       <div className={classes.header}>
         <Typography variant="h4">{props.unit.name}</Typography>
-        <UnitMenu />
+        <UnitMenu unit={props.unit} />
       </div>
       <Divider style={{ marginTop: "8px", marginBottom: "8px" }} />
-      <Typography variant="h6">
-        Current grade: {props.unit.currentGrade || "N/A"}
-      </Typography>
-      <Typography variant="h6">Unit progress: {props.unit.progress}</Typography>
+      <Typography variant="h6">Current grade: {average}</Typography>
       <Typography variant="h6">Assessments</Typography>
       <div id="assessment-list">
         {assessments.map((assessment) => {
