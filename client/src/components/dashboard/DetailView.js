@@ -35,17 +35,14 @@ function DetailView(props) {
 
   useEffect(() => {
     if (props.unit) {
-      async function getUnitData() {
-        await props.fetchUser();
-        // Could be a better/faster alternative but OK for now
-        setAssessments(
-          props.user.assessments.filter((assessment) => {
-            return assessment.unit === props.unit.name;
-          })
-        );
-        setAverage(calcAverage());
-      }
-      getUnitData();
+      props.fetchUser();
+      // Could be a better/faster alternative but OK for now
+      setAssessments(
+        props.user.assessments.filter((assessment) => {
+          return assessment.unit === props.unit.name;
+        })
+      );
+      //setAverage(calcAverage());
     }
   }, [props.unit, props.user.assessments.length]);
 
@@ -83,7 +80,7 @@ function DetailView(props) {
         <UnitMenu unit={props.unit} />
       </div>
       <Divider style={{ marginTop: "8px", marginBottom: "8px" }} />
-      <Typography variant="h6">Current grade: {average}</Typography>
+      <Typography variant="h6">Current grade: {calcAverage()}</Typography>
       <Typography variant="h6">Assessments</Typography>
       <div id="assessment-list">
         {assessments.map((assessment) => {

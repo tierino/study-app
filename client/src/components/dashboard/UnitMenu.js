@@ -76,6 +76,7 @@ function AccountMenu(props) {
   }
 
   async function handleDelete() {
+    handleDeleteDialogClose();
     await axios.post("/units/remove", { name: props.unit.name });
     props.fetchUser();
   }
