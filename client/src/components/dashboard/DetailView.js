@@ -36,6 +36,7 @@ function DetailView(props) {
   useEffect(() => {
     if (props.unit) {
       props.fetchUser();
+      axios.get("/units/find", { params: { name: props.unit.name } });
       // Could be a better/faster alternative but OK for now
       setAssessments(
         props.user.assessments.filter((assessment) => {

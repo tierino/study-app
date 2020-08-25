@@ -106,15 +106,17 @@ function Assessment(props) {
     handleClose();
   }
 
-  function handleAssessmentToggle(id, grade) {
+  async function handleAssessmentToggle(id, grade) {
     // Toggle the assessment in the database
-    axios.post("/units/toggle_assessment", {
+    await axios.post("/units/toggle_assessment", {
       assessmentId: id,
       grade,
       toggleType: !complete,
     });
+    // props.fetchUser();
+    // axios.post("/units/update", { name: props.selectedUnit.name, grade });
     // And change component-level state
-    setComplete(!complete);
+    // setComplete(!complete);
     setGrade(grade);
   }
 
@@ -197,7 +199,13 @@ function Assessment(props) {
   );
 }
 
+function mapStateToProps(state) {
+  return {
+    selectedUnit: state.selectedUnit,
+  };
+}
+
 export default compose(
-  connect(null, { fetchUser }),
+  connect(mapStateToProps, { fetchUser }),
   reduxForm({ form: "grade" })
 )(Assessment);

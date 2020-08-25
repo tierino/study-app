@@ -49,7 +49,7 @@ module.exports = (app) => {
     async function toggleAssessment() {
       // Get the model of the user being followed
       const response = await User.updateOne(
-        { "units.name": name },
+        { _id: req.user._id, "units.name": name },
         {
           $set: {
             "units.$.grade": grade,
@@ -59,6 +59,23 @@ module.exports = (app) => {
       res.send(response);
     }
     toggleAssessment();
+  });
+
+  // Get a unit's data -- NOT WORKING
+  app.get("/units/find", (req, res) => {
+    const { name } = req.body;
+    console.log(req.query);
+
+    async function findUnit() {
+      // Get the model of the user being followed
+      const response = await User.findOne({
+        _id: req.user._id,
+        "units.name": name,
+      });
+      res.send(response);
+      console.log(response);
+    }
+    findUnit();
   });
 
   // Add an assessment to a unit
