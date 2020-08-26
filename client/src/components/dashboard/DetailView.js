@@ -6,7 +6,7 @@ import shortid from "shortid";
 import Assessment from "./Assessment";
 import AddAssessment from "./AddAssessment";
 import UnitMenu from "./UnitMenu";
-import { fetchUnit, fetchUser } from "../../actions";
+import { fetchUnit, fetchUser, fetchAssessments } from "../../actions";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
@@ -31,20 +31,20 @@ const useStyles = makeStyles((theme) => ({
 function DetailView(props) {
   const classes = useStyles();
 
-  const [assessments, setAssessments] = useState([]);
+  //const [assessments, setAssessments] = useState([]);
   const [average, setAverage] = useState("N/A");
 
   useEffect(() => {
     if (props.unit) {
-      props.fetchUser();
+      props.fetchAssessments(props.unit.name);
+      //props.fetchUser();
       // Could be a better/faster alternative but OK for now
-      setAssessments(
-        props.user.assessments.filter((assessment) => {
-          return assessment.unit === props.unit.name;
-        })
-      );
+      // setAssessments(
+      //   props.user.assessments.filter((assessment) => {
+      //     return assessment.unit === props.unit.name;
+      //   })
+      // );
       //setAverage(calcAverage());
-      console.log(assessments);
     }
   }, [props.unit]);
 
@@ -57,23 +57,33 @@ function DetailView(props) {
     let sumWeights = 0;
     let sumProducts = 0;
 
-    assessments.map((assessment) => {
-      if (assessment.isComplete) {
-        sumWeights += parseFloat(assessment.weight);
-      }
-    });
+    if (props.assessments) {
+      props.assessments.map((assessment) => {
+        if (assessment.isComplete) {
+          sumWeights += parseFloat(assessment.weight);
+        }
+      });
 
-    assessments.map((assessment) => {
-      if (assessment.isComplete) {
-        sumProducts +=
-          parseFloat(assessment.grade) * parseFloat(assessment.weight);
-      }
-    });
+      props.assessments.map((assessment) => {
+        if (assessment.isComplete) {
+          sumProducts +=
+            parseFloat(assessment.grade) * parseFloat(assessment.weight);
+        }
+      });
 
-    if (sumWeights > 0) {
-      return sumProducts / sumWeights;
+      if (sumWeights > 0) {
+        return sumProducts / sumWeights;
+      }
     }
     return "N/A";
+  }
+
+  function renderAssessments() {
+    if (props.assessments) {
+      return props.assessments.map((assessment) => {
+        return <Assessment key={shortid.generate()} assessment={assessment} />;
+      });
+    }
   }
 
   if (!props.unit) {
@@ -94,13 +104,7 @@ function DetailView(props) {
         </IconButton>
       </Typography>
       <Typography variant="h6">Assessments</Typography>
-      <div id="assessment-list">
-        {assessments.map((assessment) => {
-          return (
-            <Assessment key={shortid.generate()} assessment={assessment} />
-          );
-        })}
-      </div>
+      <div id="assessment-list">{renderAssessments()}</div>
       <AddAssessment />
     </div>
   );
@@ -110,7 +114,12 @@ function mapStateToProps(state) {
   return {
     user: state.auth.user,
     unit: state.selectedUnit,
+    assessments: state.unitAssessments,
   };
 }
 
-export default connect(mapStateToProps, { fetchUnit, fetchUser })(DetailView);
+export default connect(mapStateToProps, {
+  fetchUnit,
+  fetchUser,
+  fetchAssessments,
+})(DetailView);

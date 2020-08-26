@@ -1,5 +1,11 @@
 import axios from "axios";
-import { FETCH_USER, AUTH_USER, AUTH_ERROR, SELECT_UNIT } from "./types";
+import {
+  FETCH_USER,
+  AUTH_USER,
+  AUTH_ERROR,
+  FETCH_UNIT,
+  FETCH_ASSESSMENTS,
+} from "./types";
 
 export const fetchUser = () => async (dispatch) => {
   console.log("fetching user...");
@@ -37,7 +43,18 @@ export const fetchUnit = (unitName) => async (dispatch) => {
   });
 
   dispatch({
-    type: SELECT_UNIT,
+    type: FETCH_UNIT,
+    payload: response.data,
+  });
+};
+
+export const fetchAssessments = (unitName) => async (dispatch) => {
+  const response = await axios.get("/units/get_assessments", {
+    params: { unit: unitName },
+  });
+
+  dispatch({
+    type: FETCH_ASSESSMENTS,
     payload: response.data,
   });
 };

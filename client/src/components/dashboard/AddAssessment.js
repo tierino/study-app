@@ -7,7 +7,7 @@ import axios from "axios";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
 
-import { fetchUser } from "../../actions";
+import { fetchAssessments } from "../../actions";
 
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -92,7 +92,7 @@ function AddAssessment(props) {
         weight,
         dueDate: selectedDate,
       });
-      props.fetchUser();
+      props.fetchAssessments(props.selectedUnit.name);
     }
   }
 
@@ -167,6 +167,6 @@ function mapStateToProps(state) {
 }
 
 export default compose(
-  connect(mapStateToProps, { fetchUser }),
+  connect(mapStateToProps, { fetchAssessments }),
   reduxForm({ form: "addAssessment" })
 )(AddAssessment);

@@ -112,7 +112,7 @@ module.exports = (app) => {
       const response = await User.findByIdAndUpdate(req.user._id, {
         $pull: {
           assessments: {
-            id: req.body.assessmentId,
+            id: assessmentId,
           },
         },
       });
@@ -139,5 +139,24 @@ module.exports = (app) => {
       res.send(response);
     }
     toggleAssessment();
+  });
+
+  // Get a unit's assessments
+  app.get("/units/get_assessments", (req, res) => {
+    const { unit } = req.query;
+
+    async function getAssessments() {
+      // Get the model of the user being followed
+      const response = await User.findOne({
+        _id: req.user._id,
+      }).select("assessments");
+
+      const filteredAssessments = response.assessments.filter((assessment) => {
+        return assessment.unit === unit;
+      });
+
+      res.send(filteredAssessments);
+    }
+    getAssessments();
   });
 };
