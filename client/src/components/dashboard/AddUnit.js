@@ -4,7 +4,7 @@ import { compose } from "redux";
 import { connect } from "react-redux";
 import axios from "axios";
 
-import { fetchUser, selectUnit } from "../../actions";
+import { fetchUser } from "../../actions";
 
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -121,6 +121,6 @@ function mapStateToProps(state) {
 }
 
 export default compose(
-  connect(mapStateToProps, { fetchUser, selectUnit }),
+  connect(mapStateToProps, { fetchUser }),
   reduxForm({ form: "addUnit" })
 )(AddUnit);

@@ -7,7 +7,7 @@ import shortid from "shortid";
 
 import AddAssessment from "./AddAssessment";
 import UnitMenu from "./UnitMenu";
-import { fetchUser, selectUnit } from "../../actions";
+import { fetchUnit } from "../../actions";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
@@ -24,7 +24,6 @@ import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import ListItemText from "@material-ui/core/ListItemText";
 import Checkbox from "@material-ui/core/Checkbox";
 import Popover from "@material-ui/core/Popover";
-import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
 import Box from "@material-ui/core/Box";
 import Paper from "@material-ui/core/Paper";
 
@@ -113,11 +112,8 @@ function Assessment(props) {
       grade,
       toggleType: !complete,
     });
-    // props.fetchUser();
-    // axios.post("/units/update", { name: props.selectedUnit.name, grade });
     // And change component-level state
-    // setComplete(!complete);
-    setGrade(grade);
+    setComplete(!complete);
   }
 
   function getSecondaryText() {
@@ -130,7 +126,7 @@ function Assessment(props) {
 
   async function handleDelete(id) {
     await axios.post("/units/remove_assessment", { assessmentId: id });
-    props.fetchUser();
+    props.fetchUnit(props.selectedUnit.name);
   }
 
   return (
@@ -206,6 +202,6 @@ function mapStateToProps(state) {
 }
 
 export default compose(
-  connect(mapStateToProps, { fetchUser }),
+  connect(mapStateToProps, { fetchUnit }),
   reduxForm({ form: "grade" })
 )(Assessment);

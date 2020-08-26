@@ -61,19 +61,17 @@ module.exports = (app) => {
     toggleAssessment();
   });
 
-  // Get a unit's data -- NOT WORKING
+  // Get a unit's data
   app.get("/units/find", (req, res) => {
-    const { name } = req.body;
-    console.log(req.query);
+    const { name } = req.query;
 
     async function findUnit() {
       // Get the model of the user being followed
       const response = await User.findOne({
         _id: req.user._id,
-        "units.name": name,
-      });
-      res.send(response);
-      console.log(response);
+      }).select({ units: { $elemMatch: { name: name } } });
+
+      res.send(response.units[0]);
     }
     findUnit();
   });

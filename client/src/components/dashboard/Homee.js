@@ -8,7 +8,7 @@ import UnitList from "./UnitList";
 import AddUnit from "./AddUnit";
 import DetailView from "./DetailView";
 import AccountMenu from "./AccountMenu";
-import { fetchUser, selectUnit } from "../../actions";
+import { fetchUser } from "../../actions";
 
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
@@ -119,10 +119,6 @@ function Homee(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
 
-  useEffect(() => {
-    props.selectUnit(props.user.units[props.user.units.length - 1]);
-  }, [props.user.units.length]);
-
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -228,6 +224,4 @@ function mapStateToProps(state) {
 }
 
 // Wrap in requireAuth HOC
-export default connect(mapStateToProps, { fetchUser, selectUnit })(
-  requireAuth(Homee)
-);
+export default connect(mapStateToProps, { fetchUser })(requireAuth(Homee));

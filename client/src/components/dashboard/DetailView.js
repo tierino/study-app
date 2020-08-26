@@ -6,12 +6,13 @@ import shortid from "shortid";
 import Assessment from "./Assessment";
 import AddAssessment from "./AddAssessment";
 import UnitMenu from "./UnitMenu";
-import { fetchUser, selectUnit } from "../../actions";
+import { fetchUnit, fetchUser } from "../../actions";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
+import RefreshIcon from "@material-ui/icons/Refresh";
 import DeleteIcon from "@material-ui/icons/Delete";
 import IconButton from "@material-ui/core/IconButton";
 import ListItem from "@material-ui/core/ListItem";
@@ -36,7 +37,6 @@ function DetailView(props) {
   useEffect(() => {
     if (props.unit) {
       props.fetchUser();
-      axios.get("/units/find", { params: { name: props.unit.name } });
       // Could be a better/faster alternative but OK for now
       setAssessments(
         props.user.assessments.filter((assessment) => {
@@ -44,8 +44,14 @@ function DetailView(props) {
         })
       );
       //setAverage(calcAverage());
+      console.log(assessments);
     }
-  }, [props.unit, props.user.assessments.length]);
+  }, [props.unit]);
+
+  async function updateAverage() {
+    await props.fetchUnit(props.unit.name);
+    setAverage(calcAverage());
+  }
 
   function calcAverage() {
     let sumWeights = 0;
@@ -81,7 +87,12 @@ function DetailView(props) {
         <UnitMenu unit={props.unit} />
       </div>
       <Divider style={{ marginTop: "8px", marginBottom: "8px" }} />
-      <Typography variant="h6">Current grade: {calcAverage()}</Typography>
+      <Typography variant="h6">
+        Current grade: {calcAverage()}
+        <IconButton onClick={updateAverage}>
+          <RefreshIcon />
+        </IconButton>
+      </Typography>
       <Typography variant="h6">Assessments</Typography>
       <div id="assessment-list">
         {assessments.map((assessment) => {
@@ -102,4 +113,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { fetchUser, selectUnit })(DetailView);
+export default connect(mapStateToProps, { fetchUnit, fetchUser })(DetailView);

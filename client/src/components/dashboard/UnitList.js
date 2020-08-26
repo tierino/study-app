@@ -4,7 +4,7 @@ import shortid from "shortid";
 import axios from "axios";
 
 import AddUnit from "./AddUnit";
-import { selectUnit, fetchUser } from "../../actions";
+import { fetchUnit, fetchUser } from "../../actions";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Avatar from "@material-ui/core/Avatar";
@@ -36,18 +36,13 @@ function UnitList(props) {
     return str.slice(0, 12) + "...";
   }
 
-  function handleDelete(name) {
-    axios.post("/units/remove", { name: name });
-    props.fetchUser();
-  }
-
   function renderUnits() {
     return props.user.units.map((unit) => {
       return (
         <ListItem
           button
           onClick={() => {
-            props.selectUnit(unit);
+            props.fetchUnit(unit.name);
           }}
           key={shortid.generate()}
         >
@@ -77,4 +72,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { selectUnit, fetchUser })(UnitList);
+export default connect(mapStateToProps, { fetchUnit, fetchUser })(UnitList);

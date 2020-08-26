@@ -31,9 +31,13 @@ export const signin = (formProps, callback) => async (dispatch) => {
   }
 };
 
-export const selectUnit = (unit) => {
-  return {
+export const fetchUnit = (unitName) => async (dispatch) => {
+  const response = await axios.get("/units/find", {
+    params: { name: unitName },
+  });
+
+  dispatch({
     type: SELECT_UNIT,
-    payload: unit || null,
-  };
+    payload: response.data,
+  });
 };
