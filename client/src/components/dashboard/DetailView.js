@@ -29,12 +29,13 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "space-between",
   },
+  alert: {
+    marginBottom: theme.spacing(2),
+  },
 }));
 
 function DetailView(props) {
   const classes = useStyles();
-
-  // Alert state
 
   useEffect(() => {
     if (props.unit) {
@@ -79,15 +80,13 @@ function DetailView(props) {
     let sumWeights = 0;
     if (props.assessments) {
       props.assessments.map((assessment) => {
-        if (assessment.isComplete) {
-          sumWeights += parseFloat(assessment.weight);
-        }
+        sumWeights += parseFloat(assessment.weight);
       });
     }
 
     if (sumWeights > 100)
       return (
-        <Alert severity="warning">
+        <Alert className={classes.alert} severity="warning">
           Assessment weights for this unit total over 100.
         </Alert>
       );
@@ -109,8 +108,8 @@ function DetailView(props) {
       </Typography>
       <Typography variant="h6">Assessments</Typography>
       <div id="assessment-list">{renderAssessments()}</div>
-      <AddAssessment />
       {renderAlert()}
+      <AddAssessment />
     </div>
   );
 }

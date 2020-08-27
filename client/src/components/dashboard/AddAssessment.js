@@ -13,6 +13,7 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import Dialog from "@material-ui/core/Dialog";
+import AddIcon from "@material-ui/icons/Add";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
@@ -98,7 +99,9 @@ function AddAssessment(props) {
 
   return (
     <div>
-      <Button onClick={handleClickOpen}>Add assessment</Button>
+      <Button onClick={handleClickOpen} startIcon={<AddIcon />}>
+        Add assessment
+      </Button>
       <Dialog
         open={open}
         onClose={handleClose}

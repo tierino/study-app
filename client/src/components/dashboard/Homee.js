@@ -32,6 +32,7 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import DeleteIcon from "@material-ui/icons/Delete";
 
 const drawerWidth = 240;
+const dashHeight = 720;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -108,10 +109,10 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
   },
   fixedHeight: {
-    height: 480,
+    height: dashHeight,
   },
   halfHeight: {
-    height: 228,
+    height: dashHeight / 2 - 12,
   },
 }));
 

@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import axios from "axios";
 import { reduxForm, Field } from "redux-form";
 import shortid from "shortid";
+import moment from "moment";
 
 import AddAssessment from "./AddAssessment";
 import UnitMenu from "./UnitMenu";
@@ -12,12 +13,16 @@ import { fetchUnit } from "../../actions";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
+import Grid from "@material-ui/core/Grid";
 import CheckIcon from "@material-ui/icons/Check";
 import Divider from "@material-ui/core/Divider";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import DeleteIcon from "@material-ui/icons/Delete";
 import IconButton from "@material-ui/core/IconButton";
+import PieChartIcon from "@material-ui/icons/PieChart";
+import Chip from "@material-ui/core/Chip";
+import EventIcon from "@material-ui/icons/Event";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
@@ -28,19 +33,19 @@ import Box from "@material-ui/core/Box";
 import Paper from "@material-ui/core/Paper";
 
 const useStyles = makeStyles((theme) => ({
-  gradeForm: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
   gradeInput: {
     margin: 0,
   },
   gradePaper: {
+    display: "flex",
     padding: theme.spacing(2),
+    width: 238,
   },
-  gradeSubmitButton: {
-    marginLeft: theme.spacing(2),
+  formGrid: {
+    alignItems: "center",
+  },
+  chip: {
+    marginRight: theme.spacing(1),
   },
 }));
 
@@ -114,11 +119,41 @@ function Assessment(props) {
     props.fetchUnit(props.selectedUnit.name);
   }
 
-  function getSecondaryText() {
+  function renderAttributes() {
     if (!complete) {
-      return `${props.assessment.weight}%`;
+      return (
+        <div className={classes.attributeContainer}>
+          <Chip
+            className={classes.chip}
+            size="small"
+            label={`Weighted ${props.assessment.weight}%`}
+            icon={<PieChartIcon />}
+          />
+          <Chip
+            className={classes.chip}
+            size="small"
+            label={`Due ${moment(props.assessment.dueDate).format("MMM Do")}`}
+            icon={<EventIcon />}
+          />
+        </div>
+      );
     } else {
-      return `${props.assessment.weight}% · Complete (${grade}%)`;
+      return (
+        <div className={classes.attributeContainer}>
+          <Chip
+            className={classes.chip}
+            size="small"
+            label={`Weighted ${props.assessment.weight}%`}
+            icon={<PieChartIcon />}
+          />
+          <Chip
+            className={classes.chip}
+            size="small"
+            label={`Received ${grade}%`}
+            icon={<CheckIcon />}
+          />
+        </div>
+      );
     }
   }
 
@@ -139,8 +174,9 @@ function Assessment(props) {
         <ListItemIcon>
           <Checkbox color="primary" checked={complete} />
         </ListItemIcon>
-        <ListItemText secondary={getSecondaryText()}>
+        <ListItemText>
           {props.assessment.name}
+          {renderAttributes()}
         </ListItemText>
         <ListItemSecondaryAction>
           <IconButton onClick={() => handleDelete(props.assessment.id)}>
@@ -163,30 +199,35 @@ function Assessment(props) {
         }}
       >
         <Paper className={classes.gradePaper} variant="outlined">
-          <form
-            className={classes.gradeForm}
-            onSubmit={props.handleSubmit(handleGradeSubmit)}
-          >
-            <Field
-              InputProps={{ inputProps: { min: 0, max: 100 } }}
-              className={classes.gradeInput}
-              name="enteredGrade"
-              component={renderNumField}
-              label="Grade (%)"
-              autoComplete="off"
-              autoFocus
-            />
-            <div>
-              <Button
-                className={classes.gradeSubmitButton}
-                color="primary"
-                variant="contained"
-                type="submit"
-                startIcon={<CheckIcon />}
-              >
-                Ok
-              </Button>
-            </div>
+          <form onSubmit={props.handleSubmit(handleGradeSubmit)}>
+            <Grid
+              container
+              spacing={2}
+              direction="row"
+              className={classes.formGrid}
+            >
+              <Grid item xs={9}>
+                <Field
+                  InputProps={{ inputProps: { min: 0, max: 100 } }}
+                  className={classes.gradeInput}
+                  name="enteredGrade"
+                  component={renderNumField}
+                  label="Grade (%)"
+                  autoComplete="off"
+                  autoFocus
+                />
+              </Grid>
+              <Grid item xs={3}>
+                <Button
+                  size="small"
+                  color="primary"
+                  variant="contained"
+                  type="submit"
+                >
+                  OK
+                </Button>
+              </Grid>
+            </Grid>
           </form>
         </Paper>
       </Popover>
