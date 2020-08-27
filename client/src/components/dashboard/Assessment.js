@@ -68,9 +68,6 @@ const renderNumField = ({
 function Assessment(props) {
   const classes = useStyles();
 
-  // A lot of the component-level state here is just to make the app feel
-  // smoother, rather than waiting on API requests to update certain data.
-
   // isComplete state
   const [complete, setComplete] = useState(props.assessment.isComplete);
 
@@ -113,7 +110,8 @@ function Assessment(props) {
       toggleType: !complete,
     });
     // And change component-level state
-    setComplete(!complete);
+    //setComplete(!complete);
+    props.fetchUnit(props.selectedUnit.name);
   }
 
   function getSecondaryText() {
@@ -139,7 +137,7 @@ function Assessment(props) {
         value={props.assessment.name}
       >
         <ListItemIcon>
-          <Checkbox checked={complete} />
+          <Checkbox color="primary" checked={complete} />
         </ListItemIcon>
         <ListItemText secondary={getSecondaryText()}>
           {props.assessment.name}
@@ -170,6 +168,7 @@ function Assessment(props) {
             onSubmit={props.handleSubmit(handleGradeSubmit)}
           >
             <Field
+              InputProps={{ inputProps: { min: 0, max: 100 } }}
               className={classes.gradeInput}
               name="enteredGrade"
               component={renderNumField}

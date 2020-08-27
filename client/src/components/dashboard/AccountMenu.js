@@ -6,7 +6,7 @@ import Button from "@material-ui/core/Button";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Grow from "@material-ui/core/Grow";
 import Paper from "@material-ui/core/Paper";
-import SettingsIcon from "@material-ui/icons/Settings";
+import EditIcon from "@material-ui/icons/Edit";
 import Popper from "@material-ui/core/Popper";
 import MenuItem from "@material-ui/core/MenuItem";
 import MenuList from "@material-ui/core/MenuList";
@@ -107,9 +107,9 @@ function AccountMenu(props) {
       >
         <MenuItem onClick={handleClose}>
           <ListItemIcon>
-            <SettingsIcon />
+            <EditIcon />
           </ListItemIcon>
-          My account
+          Change username
         </MenuItem>
         <MenuItem
           onClick={() => {

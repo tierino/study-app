@@ -139,6 +139,7 @@ function AddAssessment(props) {
             <Field
               name="weight"
               component={renderNumField}
+              InputProps={{ inputProps: { min: 0, max: 100 } }}
               label="Weighting (%)"
               autoComplete="off"
               required

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import axios from "axios";
 import shortid from "shortid";
+import numeral from "numeral";
 
 import Assessment from "./Assessment";
 import AddAssessment from "./AddAssessment";
@@ -12,8 +13,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
+import Alert from "@material-ui/lab/Alert";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import DeleteIcon from "@material-ui/icons/Delete";
+import Snackbar from "@material-ui/core/Snackbar";
 import IconButton from "@material-ui/core/IconButton";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -31,27 +34,13 @@ const useStyles = makeStyles((theme) => ({
 function DetailView(props) {
   const classes = useStyles();
 
-  //const [assessments, setAssessments] = useState([]);
-  const [average, setAverage] = useState("N/A");
+  // Alert state
 
   useEffect(() => {
     if (props.unit) {
       props.fetchAssessments(props.unit.name);
-      //props.fetchUser();
-      // Could be a better/faster alternative but OK for now
-      // setAssessments(
-      //   props.user.assessments.filter((assessment) => {
-      //     return assessment.unit === props.unit.name;
-      //   })
-      // );
-      //setAverage(calcAverage());
     }
   }, [props.unit]);
-
-  async function updateAverage() {
-    await props.fetchUnit(props.unit.name);
-    setAverage(calcAverage());
-  }
 
   function calcAverage() {
     let sumWeights = 0;
@@ -86,6 +75,24 @@ function DetailView(props) {
     }
   }
 
+  function renderAlert() {
+    let sumWeights = 0;
+    if (props.assessments) {
+      props.assessments.map((assessment) => {
+        if (assessment.isComplete) {
+          sumWeights += parseFloat(assessment.weight);
+        }
+      });
+    }
+
+    if (sumWeights > 100)
+      return (
+        <Alert severity="warning">
+          Assessment weights for this unit total over 100.
+        </Alert>
+      );
+  }
+
   if (!props.unit) {
     return <Typography>No unit selected</Typography>;
   }
@@ -98,14 +105,12 @@ function DetailView(props) {
       </div>
       <Divider style={{ marginTop: "8px", marginBottom: "8px" }} />
       <Typography variant="h6">
-        Current grade: {calcAverage()}
-        <IconButton onClick={updateAverage}>
-          <RefreshIcon />
-        </IconButton>
+        Current grade: {numeral(calcAverage()).format("0.00")}
       </Typography>
       <Typography variant="h6">Assessments</Typography>
       <div id="assessment-list">{renderAssessments()}</div>
       <AddAssessment />
+      {renderAlert()}
     </div>
   );
 }
