@@ -10,6 +10,7 @@ const userSchema = new Schema({
   password: String || null,
   units: Array,
   assessments: Array,
+  prefersLightMode: false,
 });
 
 // On Save Hook, encrypt password

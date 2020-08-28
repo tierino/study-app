@@ -17,12 +17,13 @@ import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 
 const useStyles = makeStyles((theme) => ({
-  small: {
-    backgroundColor: "#fafafa",
+  smallAvatar: {
+    backgroundColor: "#78909c",
     fontWeight: "bold",
     width: theme.spacing(3),
     height: theme.spacing(3),
     fontSize: "1em",
+    color: "#fafafa",
   },
 }));
 
@@ -47,7 +48,7 @@ function UnitList(props) {
           key={shortid.generate()}
         >
           <ListItemIcon>
-            <Avatar className={classes.small} color="primary">
+            <Avatar className={classes.smallAvatar} color="primary">
               {unit.name.charAt(0).toUpperCase()}
             </Avatar>
           </ListItemIcon>

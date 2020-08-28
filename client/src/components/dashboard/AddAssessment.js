@@ -7,7 +7,7 @@ import axios from "axios";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
 
-import { fetchAssessments } from "../../actions";
+import { fetchAssessments, fetchUser } from "../../actions";
 
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -72,7 +72,7 @@ function AddAssessment(props) {
   const [selectedDate, setSelectedDate] = React.useState(Date.now());
 
   const handleDateChange = (date) => {
-    setSelectedDate(date);
+    setSelectedDate(Date.parse(date));
   };
 
   const handleClickOpen = () => {
@@ -94,12 +94,18 @@ function AddAssessment(props) {
         dueDate: selectedDate,
       });
       props.fetchAssessments(props.selectedUnit.name);
+      props.fetchUser();
     }
   }
 
   return (
     <div>
-      <Button onClick={handleClickOpen} startIcon={<AddIcon />}>
+      <Button
+        onClick={handleClickOpen}
+        style={{ marginTop: "8px" }}
+        color="primary"
+        startIcon={<AddIcon />}
+      >
         Add assessment
       </Button>
       <Dialog
@@ -171,6 +177,6 @@ function mapStateToProps(state) {
 }
 
 export default compose(
-  connect(mapStateToProps, { fetchAssessments }),
+  connect(mapStateToProps, { fetchAssessments, fetchUser }),
   reduxForm({ form: "addAssessment" })
 )(AddAssessment);

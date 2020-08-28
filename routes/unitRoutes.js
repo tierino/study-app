@@ -13,7 +13,7 @@ module.exports = (app) => {
       // Get the model of the user being followed
       const response = await User.findByIdAndUpdate(req.user._id, {
         $addToSet: {
-          units: { name, grade: 0.0, progress: 0.0, assessments: [] },
+          units: { name },
         },
       });
 
@@ -32,7 +32,8 @@ module.exports = (app) => {
       // Get the model of the user being followed
       const response = await User.findByIdAndUpdate(req.user._id, {
         $pull: {
-          units: { name, grade: 0.0, progress: 0.0, assessments: [] },
+          units: { name },
+          assessments: { unit: name },
         },
       });
 

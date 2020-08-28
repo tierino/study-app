@@ -41,9 +41,9 @@ const App = (props) => {
     () =>
       createMuiTheme({
         palette: {
-          type: "dark",
+          type: "light",
           primary: { main: "#78909c" },
-          secondary: { main: "#ff5722" },
+          secondary: { main: "#b71c1c" },
         },
       }),
     []

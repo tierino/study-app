@@ -8,7 +8,7 @@ import moment from "moment";
 
 import AddAssessment from "./AddAssessment";
 import UnitMenu from "./UnitMenu";
-import { fetchUnit } from "../../actions";
+import { fetchUnit, fetchUser } from "../../actions";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
@@ -37,12 +37,10 @@ const useStyles = makeStyles((theme) => ({
     margin: 0,
   },
   gradePaper: {
-    display: "flex",
     padding: theme.spacing(2),
-    width: 238,
   },
-  formGrid: {
-    alignItems: "center",
+  submitGrade: {
+    marginTop: theme.spacing(2),
   },
   chip: {
     marginRight: theme.spacing(1),
@@ -160,6 +158,7 @@ function Assessment(props) {
   async function handleDelete(id) {
     await axios.post("/units/remove_assessment", { assessmentId: id });
     props.fetchUnit(props.selectedUnit.name);
+    props.fetchUser();
   }
 
   return (
@@ -198,38 +197,30 @@ function Assessment(props) {
           horizontal: "left",
         }}
       >
-        <Paper className={classes.gradePaper} variant="outlined">
-          <form onSubmit={props.handleSubmit(handleGradeSubmit)}>
-            <Grid
-              container
-              spacing={2}
-              direction="row"
-              className={classes.formGrid}
+        <form onSubmit={props.handleSubmit(handleGradeSubmit)}>
+          <Paper className={classes.gradePaper} variant="outlined">
+            <Field
+              InputProps={{ inputProps: { min: 0, max: 100 } }}
+              className={classes.gradeInput}
+              name="enteredGrade"
+              component={renderNumField}
+              label="Grade (%)"
+              autoComplete="off"
+              autoFocus
+            />
+
+            <Button
+              className={classes.submitGrade}
+              size="small"
+              fullWidth
+              color="primary"
+              variant="contained"
+              type="submit"
             >
-              <Grid item xs={9}>
-                <Field
-                  InputProps={{ inputProps: { min: 0, max: 100 } }}
-                  className={classes.gradeInput}
-                  name="enteredGrade"
-                  component={renderNumField}
-                  label="Grade (%)"
-                  autoComplete="off"
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={3}>
-                <Button
-                  size="small"
-                  color="primary"
-                  variant="contained"
-                  type="submit"
-                >
-                  OK
-                </Button>
-              </Grid>
-            </Grid>
-          </form>
-        </Paper>
+              OK
+            </Button>
+          </Paper>
+        </form>
       </Popover>
     </div>
   );
@@ -242,6 +233,6 @@ function mapStateToProps(state) {
 }
 
 export default compose(
-  connect(mapStateToProps, { fetchUnit }),
+  connect(mapStateToProps, { fetchUnit, fetchUser }),
   reduxForm({ form: "grade" })
 )(Assessment);

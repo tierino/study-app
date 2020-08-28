@@ -7,6 +7,7 @@ import requireAuth from "../requireAuth";
 import UnitList from "./UnitList";
 import AddUnit from "./AddUnit";
 import DetailView from "./DetailView";
+import Upcoming from "./Upcoming";
 import AccountMenu from "./AccountMenu";
 import { fetchUser, fetchUnit } from "../../actions";
 
@@ -205,7 +206,9 @@ function Homee(props) {
             <Grid item xs={12} md={5} lg={4}>
               <Grid container direction="column" spacing={3}>
                 <Grid item xs={12}>
-                  <Paper className={halfHeightPaper}>UPCOMING</Paper>
+                  <Paper className={halfHeightPaper}>
+                    <Upcoming />
+                  </Paper>
                 </Grid>
                 {/* Recent Orders */}
                 <Grid item xs={12}>
@@ -214,8 +217,12 @@ function Homee(props) {
               </Grid>
             </Grid>
           </Grid>
-          <Box pt={4}></Box>
         </Container>
+        <div style={{ textAlign: "center" }}>
+          <Typography style={{ color: "grey" }}>
+            Hello, {props.user.givenName}.
+          </Typography>
+        </div>
       </main>
     </div>
   );

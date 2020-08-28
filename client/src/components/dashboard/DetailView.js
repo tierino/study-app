@@ -101,7 +101,7 @@ function DetailView(props) {
   if (!props.unit) {
     return (
       <div className={classes.placeholder}>
-        <Hat style={{ fill: "#ffffff" }} />
+        <Hat style={{ fill: "#78909c" }} />
         <Typography variant="h6">Select a unit to see it in detail!</Typography>
       </div>
     );
@@ -114,10 +114,10 @@ function DetailView(props) {
         <UnitMenu unit={props.unit} />
       </div>
       <Divider style={{ marginTop: "8px", marginBottom: "8px" }} />
-      <Typography variant="h6">
-        Current grade: {numeral(calcAverage()).format("0.00")}
+      <Typography variant="h5">
+        Current grade {numeral(calcAverage()).format("0.00")}
       </Typography>
-      <Typography variant="h6">Assessments</Typography>
+      <Typography variant="h5">Assessments</Typography>
       {renderAssessments()}
       {renderAlert()}
       <AddAssessment />
