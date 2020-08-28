@@ -17,7 +17,9 @@ import Divider from "@material-ui/core/Divider";
 import Alert from "@material-ui/lab/Alert";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import DeleteIcon from "@material-ui/icons/Delete";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import Snackbar from "@material-ui/core/Snackbar";
+import TimelineIcon from "@material-ui/icons/Timeline";
 import IconButton from "@material-ui/core/IconButton";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -37,6 +39,14 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(16),
     alignContent: "center",
     textAlign: "center",
+  },
+  gradeContainer: {
+    textAlign: "center",
+    marginTop: theme.spacing(2),
+  },
+  noAssessments: {
+    marginTop: "8px",
+    color: "grey",
   },
 }));
 
@@ -71,14 +81,28 @@ function DetailView(props) {
         return sumProducts / sumWeights;
       }
     }
-    return "N/A";
+    return "Grade not available";
   }
 
   function renderAssessments() {
     if (props.assessments) {
-      return props.assessments.map((assessment) => {
-        return <Assessment key={shortid.generate()} assessment={assessment} />;
-      });
+      if (props.assessments.length > 0) {
+        return props.assessments.map((assessment) => {
+          return (
+            <Assessment key={shortid.generate()} assessment={assessment} />
+          );
+        });
+      } else {
+        return (
+          <div className={classes.noAssessments}>
+            <Typography variant="caption">
+              <i>You haven't added any assessments for this unit.</i>
+            </Typography>
+          </div>
+        );
+      }
+    } else {
+      return <CircularProgress />;
     }
   }
 
@@ -114,9 +138,12 @@ function DetailView(props) {
         <UnitMenu unit={props.unit} />
       </div>
       <Divider style={{ marginTop: "8px", marginBottom: "8px" }} />
-      <Typography variant="h5">
-        Current grade {numeral(calcAverage()).format("0.00")}
-      </Typography>
+      <div className={classes.gradeContainer}>
+        <TimelineIcon color="primary" />
+        <Typography variant="h4" color="primary">
+          {numeral(calcAverage()).format("0.00")}
+        </Typography>
+      </div>
       <Typography variant="h5">Assessments</Typography>
       {renderAssessments()}
       {renderAlert()}

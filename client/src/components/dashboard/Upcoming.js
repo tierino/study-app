@@ -41,28 +41,36 @@ function Upcoming(props) {
       return assessment.dueDate - Date.now() > 0;
     });
 
-    return upcoming
-      .slice(Math.max(upcoming.length - 5, 0))
-      .map((assessment) => {
-        return (
-          <div key={shortid.generate()}>
-            <ListItem>
-              <ListItemIcon>
-                <ArrowRightIcon />
-              </ListItemIcon>
-              <ListItemText
-                primary={`${assessment.name} (${moment(
-                  assessment.dueDate
-                ).fromNow()})`}
-                secondary={`${moment(assessment.dueDate).format("MMM Do")} · ${
-                  assessment.unit
-                }`}
-              />
-            </ListItem>
-            <Divider variant="middle" />
-          </div>
-        );
-      });
+    if (upcoming.length > 0) {
+      return upcoming
+        .slice(Math.max(upcoming.length - 5, 0))
+        .map((assessment) => {
+          return (
+            <div key={shortid.generate()}>
+              <ListItem>
+                <ListItemIcon>
+                  <ArrowRightIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primary={`${assessment.name} (${moment(
+                    assessment.dueDate
+                  ).fromNow()})`}
+                  secondary={`${moment(assessment.dueDate).format(
+                    "MMM Do"
+                  )} · ${assessment.unit}`}
+                />
+              </ListItem>
+              <Divider variant="middle" />
+            </div>
+          );
+        });
+    } else {
+      return (
+        <Typography variant="caption" style={{ color: "grey" }}>
+          <i>Nothing upcoming</i>
+        </Typography>
+      );
+    }
   }
 
   return (

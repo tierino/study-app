@@ -115,6 +115,10 @@ const useStyles = makeStyles((theme) => ({
   halfHeight: {
     height: dashHeight / 2 - 12,
   },
+  noUnitsContainer: {
+    marginTop: theme.spacing(32),
+    textAlign: "center",
+  },
 }));
 
 function Homee(props) {
@@ -122,7 +126,9 @@ function Homee(props) {
   const [open, setOpen] = React.useState(true);
 
   useEffect(() => {
-    props.fetchUnit(props.user.units[0].name);
+    if (props.units) {
+      props.fetchUnit(props.user.units[0].name);
+    }
   }, []);
 
   const handleDrawerOpen = () => {
@@ -195,8 +201,9 @@ function Homee(props) {
                 {props.user.units.length > 0 ? (
                   <DetailView />
                 ) : (
-                  <div>
-                    <Typography>Get started by adding some units</Typography>
+                  <div className={classes.noUnitsContainer}>
+                    <Typography variant="h5">It's empty in here...</Typography>
+                    <Typography>Get started by adding some units!</Typography>
                     <AddUnit />
                   </div>
                 )}

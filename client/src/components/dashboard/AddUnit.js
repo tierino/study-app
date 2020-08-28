@@ -73,7 +73,11 @@ function AddUnit(props) {
       );
     } else {
       return (
-        <Button variant="contained" onClick={handleClickOpen}>
+        <Button
+          style={{ marginTop: "8px" }}
+          variant="contained"
+          onClick={handleClickOpen}
+        >
           Add a unit
         </Button>
       );
