@@ -4,7 +4,7 @@ import { compose } from "redux";
 import { connect } from "react-redux";
 import axios from "axios";
 
-import { fetchUser } from "../../actions";
+import { fetchUser, fetchUnit } from "../../actions";
 
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -56,7 +56,8 @@ function AddUnit(props) {
       await axios.post("/units/add", {
         name: unitName,
       });
-      props.fetchUser();
+      await props.fetchUser();
+      props.fetchUnit(unitName);
     }
   }
 
@@ -121,6 +122,6 @@ function mapStateToProps(state) {
 }
 
 export default compose(
-  connect(mapStateToProps, { fetchUser }),
+  connect(mapStateToProps, { fetchUser, fetchUnit }),
   reduxForm({ form: "addUnit" })
 )(AddUnit);

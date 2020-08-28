@@ -6,6 +6,7 @@ import numeral from "numeral";
 
 import Assessment from "./Assessment";
 import AddAssessment from "./AddAssessment";
+import { ReactComponent as Hat } from "../../images/gradcap.svg";
 import UnitMenu from "./UnitMenu";
 import { fetchUnit, fetchUser, fetchAssessments } from "../../actions";
 
@@ -31,6 +32,11 @@ const useStyles = makeStyles((theme) => ({
   },
   alert: {
     marginBottom: theme.spacing(2),
+  },
+  placeholder: {
+    marginTop: theme.spacing(16),
+    alignContent: "center",
+    textAlign: "center",
   },
 }));
 
@@ -93,7 +99,12 @@ function DetailView(props) {
   }
 
   if (!props.unit) {
-    return <Typography>No unit selected</Typography>;
+    return (
+      <div className={classes.placeholder}>
+        <Hat style={{ fill: "#ffffff" }} />
+        <Typography variant="h6">Select a unit to see it in detail!</Typography>
+      </div>
+    );
   }
 
   return (
@@ -107,7 +118,7 @@ function DetailView(props) {
         Current grade: {numeral(calcAverage()).format("0.00")}
       </Typography>
       <Typography variant="h6">Assessments</Typography>
-      <div id="assessment-list">{renderAssessments()}</div>
+      {renderAssessments()}
       {renderAlert()}
       <AddAssessment />
     </div>

@@ -5,6 +5,7 @@ import {
   AUTH_ERROR,
   FETCH_UNIT,
   FETCH_ASSESSMENTS,
+  CLEAR_UNIT,
 } from "./types";
 
 export const fetchUser = () => async (dispatch) => {
@@ -57,4 +58,11 @@ export const fetchAssessments = (unitName) => async (dispatch) => {
     type: FETCH_ASSESSMENTS,
     payload: response.data,
   });
+};
+
+export const clearUnit = () => {
+  return {
+    type: CLEAR_UNIT,
+    payload: null,
+  };
 };

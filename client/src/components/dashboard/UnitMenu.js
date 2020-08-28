@@ -3,7 +3,7 @@ import axios from "axios";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
-import { fetchUser } from "../../actions";
+import { fetchUser, clearUnit } from "../../actions";
 
 import Button from "@material-ui/core/Button";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
@@ -79,6 +79,7 @@ function AccountMenu(props) {
     handleDeleteDialogClose();
     await axios.post("/units/remove", { name: props.unit.name });
     props.fetchUser();
+    props.clearUnit();
   }
 
   return (
@@ -139,4 +140,4 @@ function mapStateToProps(state) {
   return { user: state.auth.user };
 }
 
-export default connect(mapStateToProps, { fetchUser })(AccountMenu);
+export default connect(mapStateToProps, { fetchUser, clearUnit })(AccountMenu);

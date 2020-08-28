@@ -8,7 +8,7 @@ import UnitList from "./UnitList";
 import AddUnit from "./AddUnit";
 import DetailView from "./DetailView";
 import AccountMenu from "./AccountMenu";
-import { fetchUser } from "../../actions";
+import { fetchUser, fetchUnit } from "../../actions";
 
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
@@ -32,7 +32,7 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import DeleteIcon from "@material-ui/icons/Delete";
 
 const drawerWidth = 240;
-const dashHeight = 720;
+const dashHeight = 640;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -119,6 +119,10 @@ const useStyles = makeStyles((theme) => ({
 function Homee(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
+
+  useEffect(() => {
+    props.fetchUnit(props.user.units[0].name);
+  }, []);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -225,4 +229,6 @@ function mapStateToProps(state) {
 }
 
 // Wrap in requireAuth HOC
-export default connect(mapStateToProps, { fetchUser })(requireAuth(Homee));
+export default connect(mapStateToProps, { fetchUser, fetchUnit })(
+  requireAuth(Homee)
+);
