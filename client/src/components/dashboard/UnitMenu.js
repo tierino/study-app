@@ -115,7 +115,9 @@ function AccountMenu(props) {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <RenameUnit />
+        <div>
+          <RenameUnit />
+        </div>
         <MenuItem
           onClick={() => {
             handleClose();

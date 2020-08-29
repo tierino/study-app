@@ -32,20 +32,38 @@ import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import ListItemText from "@material-ui/core/ListItemText";
 import Checkbox from "@material-ui/core/Checkbox";
 
-const useStyles = makeStyles((theme) => ({}));
-
 function Upcoming(props) {
-  const classes = useStyles();
+  // Sort upcoming assessments by closest due date
+  function sortByDate(upcoming) {
+    const n = upcoming.length;
+    // Selection sort
+    for (let i = 0; i < n; i++) {
+      let min = i;
+      for (let j = i + 1; j < n; j++) {
+        if (upcoming[min].dueDate > upcoming[j].dueDate) {
+          min = j;
+        }
+      }
+      if (min !== i) {
+        let tmp = upcoming[i];
+        upcoming[i] = upcoming[min];
+        upcoming[min] = tmp;
+      }
+    }
+    return upcoming;
+  }
 
   function renderUpcoming() {
     let upcoming = [];
 
+    // Get assessments with due dates in the future
     upcoming = props.user.assessments.filter((assessment) => {
-      // Only get assessments with due dates in the future
-      return assessment.dueDate - Date.now() > 0;
+      return assessment.dueDate - Date.now() > 0 && !assessment.isComplete;
     });
 
     if (upcoming.length > 0) {
+      upcoming = sortByDate(upcoming);
+
       return upcoming
         .slice(Math.max(upcoming.length - 5, 0))
         .map((assessment) => {

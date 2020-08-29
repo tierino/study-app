@@ -83,6 +83,7 @@ function Assessment(props) {
   const handleClick = (event) => {
     if (complete) {
       handleAssessmentToggle(props.assessment.id, null);
+      props.fetchUser();
     } else {
       setAnchorEl(event.currentTarget);
     }
@@ -101,6 +102,7 @@ function Assessment(props) {
       // Send the data to the toggle handler
       setGrade(enteredGrade);
       handleAssessmentToggle(props.assessment.id, enteredGrade);
+      props.fetchUser();
     }
     handleClose();
   }

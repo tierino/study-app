@@ -84,7 +84,7 @@ function AccountMenu(props) {
         <Divider />
         <DialogActions>
           <Button onClick={handleSignoutDialogClose}>Cancel</Button>
-          <a href="/auth/signout" style={{ textDecoration: "none" }}>
+          <a h="/auth/signout" style={{ textDecoration: "none" }}>
             <Button variant="contained" color="secondary">
               Sign out
             </Button>
@@ -107,7 +107,9 @@ function AccountMenu(props) {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <ChangeUsername />
+        <div>
+          <ChangeUsername />
+        </div>
         <MenuItem
           onClick={() => {
             handleClose();
