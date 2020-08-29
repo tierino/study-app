@@ -43,23 +43,23 @@ module.exports = (app) => {
     removeUnit();
   });
 
-  // Update a unit's grade
-  app.post("/units/update", (req, res) => {
-    const { name, grade } = req.body;
+  // Rename a unit
+  app.post("/units/rename", (req, res) => {
+    const { oldName, newName } = req.body;
 
-    async function toggleAssessment() {
+    async function renameUnit() {
       // Get the model of the user being followed
       const response = await User.updateOne(
-        { _id: req.user._id, "units.name": name },
+        { _id: req.user._id, "units.name": oldName },
         {
           $set: {
-            "units.$.grade": grade,
+            "units.$.name": newName,
           },
         }
       );
       res.send(response);
     }
-    toggleAssessment();
+    renameUnit();
   });
 
   // Get a unit's data

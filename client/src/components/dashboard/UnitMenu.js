@@ -3,6 +3,7 @@ import axios from "axios";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
+import RenameUnit from "./RenameUnit";
 import { fetchUser, clearUnit } from "../../actions";
 
 import Button from "@material-ui/core/Button";
@@ -114,12 +115,7 @@ function AccountMenu(props) {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleClose} disabled>
-          <ListItemIcon>
-            <EditIcon />
-          </ListItemIcon>
-          Rename
-        </MenuItem>
+        <RenameUnit />
         <MenuItem
           onClick={() => {
             handleClose();

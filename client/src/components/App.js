@@ -43,7 +43,7 @@ const App = (props) => {
         palette: {
           type: "dark",
           primary: { main: "#78909c" },
-          secondary: { main: "#b71c1c" },
+          secondary: { main: "#e53935" },
         },
       }),
     []

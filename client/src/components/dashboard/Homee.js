@@ -6,7 +6,7 @@ import { reduxForm, Field } from "redux-form";
 import requireAuth from "../requireAuth";
 import UnitList from "./UnitList";
 import AddUnit from "./AddUnit";
-import DetailView from "./DetailView";
+import UnitOverview from "./UnitOverview";
 import Upcoming from "./Upcoming";
 import AccountMenu from "./AccountMenu";
 import { fetchUser, fetchUnit } from "../../actions";
@@ -123,13 +123,14 @@ const useStyles = makeStyles((theme) => ({
 
 function Homee(props) {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
 
   useEffect(() => {
-    if (props.units) {
-      props.fetchUnit(props.user.units[0].name);
-    }
+    // When the homepage loads, get UnitOverview to show the first unit
+    props.fetchUnit(props.user.units[0].name);
   }, []);
+
+  // Drawer state
+  const [open, setOpen] = React.useState(true);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -138,11 +139,11 @@ function Homee(props) {
     setOpen(false);
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-  const halfHeightPaper = clsx(classes.paper, classes.halfHeight);
 
   return (
     <div className={classes.root}>
       <CssBaseline />
+      {/* Header */}
       <AppBar
         position="absolute"
         className={clsx(classes.appBar, open && classes.appBarShift)}
@@ -172,6 +173,7 @@ function Homee(props) {
           <AccountMenu />
         </Toolbar>
       </AppBar>
+      {/* Side drawer */}
       <Drawer
         variant="permanent"
         classes={{
@@ -191,35 +193,25 @@ function Homee(props) {
         <Divider />
         <List></List>
       </Drawer>
+      {/* Dashboard */}
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
-            {/* Chart */}
+            {/* UnitOverview */}
             <Grid item xs={12} md={7} lg={8}>
               <Paper className={fixedHeightPaper}>
-                {props.user.units.length > 0 ? (
-                  <DetailView />
-                ) : (
-                  <div className={classes.noUnitsContainer}>
-                    <Typography variant="h5">It's empty in here...</Typography>
-                    <Typography>Get started by adding some units!</Typography>
-                    <AddUnit />
-                  </div>
-                )}
+                {/* Show UnitOverview if there are components, else prompt user to add units */}
+                {props.user.units.length > 0 ? <UnitOverview /> : <div></div>}
               </Paper>
             </Grid>
-            {/* Recent Deposits */}
+            {/* Upcoming */}
             <Grid item xs={12} md={5} lg={4}>
               <Grid container direction="column" spacing={3}>
                 <Grid item xs={12}>
-                  <Paper className={halfHeightPaper}>
+                  <Paper className={fixedHeightPaper}>
                     <Upcoming />
                   </Paper>
-                </Grid>
-                {/* Recent Orders */}
-                <Grid item xs={12}>
-                  <Paper className={halfHeightPaper}>OVERVIEW</Paper>
                 </Grid>
               </Grid>
             </Grid>
@@ -238,7 +230,7 @@ function Homee(props) {
 function mapStateToProps(state) {
   return {
     user: state.auth.user,
-    selectedUnit: state.selectedUnit,
+    unit: state.unit,
   };
 }
 

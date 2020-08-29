@@ -1,3 +1,7 @@
+/*****************************************************************
+ * Shows upcoming assessments for all units.
+ *****************************************************************/
+
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import axios from "axios";
@@ -67,7 +71,7 @@ function Upcoming(props) {
     } else {
       return (
         <Typography variant="caption" style={{ color: "grey" }}>
-          <i>Nothing upcoming</i>
+          <i>Your upcoming assessments for all units will appear here.</i>
         </Typography>
       );
     }

@@ -1,3 +1,8 @@
+/*****************************************************************
+ * Detailed overview of the selected unit. Manage assessments and
+ * weighted average.
+ *****************************************************************/
+
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import axios from "axios";
@@ -5,6 +10,7 @@ import shortid from "shortid";
 import numeral from "numeral";
 
 import Assessment from "./Assessment";
+import AddUnit from "./AddUnit";
 import AddAssessment from "./AddAssessment";
 import { ReactComponent as Hat } from "../../images/gradcap.svg";
 import UnitMenu from "./UnitMenu";
@@ -29,14 +35,16 @@ import Checkbox from "@material-ui/core/Checkbox";
 
 const useStyles = makeStyles((theme) => ({
   header: {
+    marginTop: theme.spacing(2),
     display: "flex",
     justifyContent: "space-between",
+    alignItems: "center",
   },
   alert: {
     marginBottom: theme.spacing(2),
   },
-  placeholder: {
-    marginTop: theme.spacing(16),
+  noUnitSelected: {
+    marginTop: theme.spacing(22),
     alignContent: "center",
     textAlign: "center",
   },
@@ -48,17 +56,24 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "8px",
     color: "grey",
   },
+  noUnits: {
+    marginTop: theme.spacing(36),
+    textAlign: "center",
+  },
 }));
 
-function DetailView(props) {
+function UnitOverview(props) {
   const classes = useStyles();
 
   useEffect(() => {
+    // Fetch assessments on mount
     if (props.unit) {
       props.fetchAssessments(props.unit.name);
     }
   }, [props.unit]);
 
+  // Calculate the unit's average. Do this on the fly rather than storing
+  // it in the database to reduce API requests.
   function calcAverage() {
     let sumWeights = 0;
     let sumProducts = 0;
@@ -84,6 +99,7 @@ function DetailView(props) {
     return "Grade not available";
   }
 
+  // Render the list of assessments for the selected unit
   function renderAssessments() {
     if (props.assessments) {
       if (props.assessments.length > 0) {
@@ -106,6 +122,7 @@ function DetailView(props) {
     }
   }
 
+  // Render alert for assessment weights that total > 100
   function renderAlert() {
     let sumWeights = 0;
     if (props.assessments) {
@@ -122,19 +139,34 @@ function DetailView(props) {
       );
   }
 
+  // If no selectedUnit is in app state, show this. This is shown after a
+  // unit is deleted
   if (!props.unit) {
     return (
-      <div className={classes.placeholder}>
+      <div className={classes.noUnitSelected}>
         <Hat style={{ fill: "#78909c" }} />
-        <Typography variant="h6">Select a unit to see it in detail!</Typography>
+        <Typography>Select a unit to see it in detail!</Typography>
       </div>
     );
   }
 
+  // If there are no units, show this
+  if (props.user.units.length === 0) {
+    return (
+      <div className={classes.noUnits}>
+        <Typography>It's empty in here...</Typography>
+        <Typography>Get started by adding some units!</Typography>
+        <AddUnit />
+      </div>
+    );
+  }
+
+  // Normal overview
   return (
     <div>
+      <Typography>UNIT OVERVIEW</Typography>
       <div className={classes.header}>
-        <Typography variant="h4">{props.unit.name}</Typography>
+        <Typography variant="h5">{props.unit.name}</Typography>
         <UnitMenu unit={props.unit} />
       </div>
       <Divider style={{ marginTop: "8px", marginBottom: "8px" }} />
@@ -144,7 +176,7 @@ function DetailView(props) {
           {numeral(calcAverage()).format("0.00")}
         </Typography>
       </div>
-      <Typography variant="h5">Assessments</Typography>
+      <Typography variant="h6">Assessments</Typography>
       {renderAssessments()}
       {renderAlert()}
       <AddAssessment />
@@ -164,4 +196,4 @@ export default connect(mapStateToProps, {
   fetchUnit,
   fetchUser,
   fetchAssessments,
-})(DetailView);
+})(UnitOverview);
