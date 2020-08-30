@@ -88,7 +88,7 @@ function ChangeUsername(props) {
             <Field
               name="newName"
               component={renderTextField}
-              label="Unit name"
+              label="New name"
               autoComplete="off"
               inputProps={{
                 maxLength: MAX_NAME_LEN,

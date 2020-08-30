@@ -6,8 +6,8 @@ import { connect } from "react-redux";
 import { fetchUser } from "../actions";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 
-import Welcome from "./Welcome";
-import Homee from "./dashboard/Homee";
+import Landing from "./Landing";
+import Home from "./dashboard/Home";
 import Signin from "./auth/Signin";
 import Signup from "./auth/Signup";
 
@@ -64,8 +64,8 @@ const App = (props) => {
   return (
     <ThemeProvider theme={theme}>
       <BrowserRouter>
-        <Route exact path="/" component={Welcome}></Route>
-        <Route exact path="/home" component={Homee}></Route>
+        <Route exact path="/" component={Landing}></Route>
+        <Route exact path="/home" component={Home}></Route>
         <Route exact path="/signin" component={Signin}></Route>
         <Route exact path="/signup" component={Signup}></Route>
       </BrowserRouter>

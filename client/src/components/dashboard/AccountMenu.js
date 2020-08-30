@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 import ChangeUsername from "./ChangeUsername";
 
@@ -72,6 +73,10 @@ function AccountMenu(props) {
     setAnchorEl(null);
   }
 
+  function handleSignout() {
+    axios.post("/auth/signout");
+  }
+
   return (
     <div className={classes.root}>
       <Dialog
@@ -84,7 +89,7 @@ function AccountMenu(props) {
         <Divider />
         <DialogActions>
           <Button onClick={handleSignoutDialogClose}>Cancel</Button>
-          <a h="/auth/signout" style={{ textDecoration: "none" }}>
+          <a href="/auth/signout" style={{ textDecoration: "none" }}>
             <Button variant="contained" color="secondary">
               Sign out
             </Button>
