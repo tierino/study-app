@@ -8,11 +8,15 @@ const bodyParser = require("body-parser");
 require("./models/User");
 require("./services/passport");
 
-mongoose.connect(keys.mongoURI, { useNewUrlParser: true }, function (err) {
-  if (err) {
-    console.log("*Can't connect to server.*");
+mongoose.connect(
+  keys.mongoURI,
+  { useNewUrlParser: true, useUnifiedTopology: true },
+  function (err) {
+    if (err) {
+      console.log("*Can't connect to server.*");
+    }
   }
-});
+);
 
 const app = express();
 
@@ -30,10 +34,14 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// Call routing functions with 'app' object
+// Attach routes
 require("./routes/authRoutes")(app);
 require("./routes/unitRoutes")(app);
 require("./routes/accountRoutes")(app);
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+}
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT);
