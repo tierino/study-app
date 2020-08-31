@@ -19,6 +19,7 @@ import { fetchUnit, fetchUser, fetchAssessments } from "../../actions";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
+import Tooltip from "@material-ui/core/Tooltip";
 import Divider from "@material-ui/core/Divider";
 import Alert from "@material-ui/lab/Alert";
 import RefreshIcon from "@material-ui/icons/Refresh";
@@ -57,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
     color: "grey",
   },
   noUnits: {
-    marginTop: theme.spacing(36),
+    marginTop: theme.spacing(30),
     textAlign: "center",
   },
 }));
@@ -139,9 +140,22 @@ function UnitOverview(props) {
       );
   }
 
+  // If there are no units, show this (new user will see this)
+  if (props.user.units.length === 0) {
+    return (
+      <div className={classes.noUnits}>
+        <Typography variant="h6">It's empty in here...</Typography>
+        <Typography variant="body2">
+          Get started by adding some units!
+        </Typography>
+        <br />
+        <AddUnit />
+      </div>
+    );
+  }
   // If no selectedUnit is in app state, show this. This is shown after a
   // unit is deleted
-  if (!props.unit) {
+  else if (!props.unit) {
     return (
       <div className={classes.noUnitSelected}>
         <Hat style={{ fill: "#78909c" }} />
@@ -149,18 +163,6 @@ function UnitOverview(props) {
       </div>
     );
   }
-
-  // If there are no units, show this
-  if (props.user.units.length === 0) {
-    return (
-      <div className={classes.noUnits}>
-        <Typography>It's empty in here...</Typography>
-        <Typography>Get started by adding some units!</Typography>
-        <AddUnit />
-      </div>
-    );
-  }
-
   // Normal overview
   return (
     <div>
@@ -172,9 +174,11 @@ function UnitOverview(props) {
       <Divider style={{ marginTop: "8px", marginBottom: "8px" }} />
       <div className={classes.gradeContainer}>
         <TimelineIcon color="primary" />
-        <Typography variant="h4" color="primary">
-          {numeral(calcAverage()).format("0.00")}
-        </Typography>
+        <Tooltip title="Your weighted average" placement="top">
+          <Typography variant="h4" color="primary">
+            {numeral(calcAverage()).format("0.00")}
+          </Typography>
+        </Tooltip>
       </div>
       <Typography variant="h6">Assessments</Typography>
       {renderAssessments()}

@@ -88,9 +88,15 @@ function Upcoming(props) {
         });
     } else {
       return (
-        <Typography variant="caption" style={{ color: "grey" }}>
-          <i>Your upcoming assessments for all units will appear here.</i>
-        </Typography>
+        <div>
+          <Typography variant="body2" style={{ color: "grey" }}>
+            Nothing upcoming!
+          </Typography>
+          <Typography variant="caption" style={{ color: "grey" }}>
+            When you have upcoming assessments for any units, they will appear
+            here.
+          </Typography>
+        </div>
       );
     }
   }

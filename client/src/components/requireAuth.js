@@ -2,28 +2,32 @@
    component it wraps */
 
 import React, { Component } from "react";
+import { withRouter } from "react-router";
 import { connect } from "react-redux";
 
-export default (ChildComponent) => {
-  class ComposedComponent extends Component {
-    componentDidMount() {
+export default (ComposedComponent) => {
+  class RequireAuth extends Component {
+    componentWillMount() {
       this.shouldNavigateAway();
     }
 
-    componentDidUpdate() {
+    componentWillUpdate() {
       this.shouldNavigateAway();
     }
     shouldNavigateAway() {
       if (!this.props.signedIn) {
+        // ** Problem here **
+        // this is updating the URL correctly, but the Landing
+        // component isn't mounting
         this.props.history.push("/");
       }
     }
     render() {
-      return <ChildComponent {...this.props} />;
+      return <ComposedComponent {...this.props} />;
     }
   }
   function mapStateToProps(state) {
     return { signedIn: state.auth.user };
   }
-  return connect(mapStateToProps)(ComposedComponent);
+  return connect(mapStateToProps)(RequireAuth);
 };

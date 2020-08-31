@@ -1,15 +1,16 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
+import { withRouter } from "react-router";
 import axios from "axios";
 import { reduxForm, Field } from "redux-form";
 
-import requireAuth from "../requireAuth";
-import UnitList from "./UnitList";
-import AddUnit from "./AddUnit";
-import UnitOverview from "./UnitOverview";
-import Upcoming from "./Upcoming";
-import AccountMenu from "./AccountMenu";
-import { fetchUser, fetchUnit } from "../../actions";
+import requireAuth from "./requireAuth";
+import UnitList from "./dashboard/UnitList";
+import AddUnit from "./dashboard/AddUnit";
+import UnitOverview from "./dashboard/UnitOverview";
+import Upcoming from "./dashboard/Upcoming";
+import AccountMenu from "./dashboard/AccountMenu";
+import { fetchUser, fetchUnit } from "../actions";
 
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
@@ -126,7 +127,9 @@ function Home(props) {
 
   useEffect(() => {
     // When the homepage loads, get UnitOverview to show the first unit
-    props.fetchUnit(props.user.units[0].name);
+    if (props.user.units.length > 0) {
+      props.fetchUnit(props.user.units[0].name);
+    }
   }, []);
 
   // Drawer state
@@ -202,7 +205,7 @@ function Home(props) {
             <Grid item xs={12} md={7} lg={8}>
               <Paper className={fixedHeightPaper}>
                 {/* Show UnitOverview if there are components, else prompt user to add units */}
-                {props.user.units.length > 0 ? <UnitOverview /> : <div></div>}
+                <UnitOverview />
               </Paper>
             </Grid>
             {/* Upcoming */}
@@ -235,6 +238,6 @@ function mapStateToProps(state) {
 }
 
 // Wrap in requireAuth HOC
-export default connect(mapStateToProps, { fetchUser, fetchUnit })(
-  requireAuth(Home)
+export default withRouter(
+  connect(mapStateToProps, { fetchUser, fetchUnit })(requireAuth(Home))
 );

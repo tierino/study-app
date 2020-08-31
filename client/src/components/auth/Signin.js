@@ -18,11 +18,16 @@ const MAX_EMAIL_LEN = 320;
 const MAX_PW_LEN = 100;
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    height: "100vh",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+  },
   title: {
     marginBottom: theme.spacing(1),
   },
   form: {
-    marginTop: theme.spacing(12),
     textAlign: "center",
   },
   submit: {
@@ -79,62 +84,64 @@ function Signin(props) {
 
   return (
     <CssBaseline>
-      <Container component="main" maxWidth="xs" className={classes.form}>
-        <Hat style={{ height: "80", width: "80", fill: "#78909c" }} />
-        <Typography component="h1" variant="h5" className={classes.title}>
-          Sign in
-        </Typography>
-        <form onSubmit={props.handleSubmit(onSubmit)}>
-          <Field
-            className={classes.textField}
-            name="email"
-            component={renderTextField}
-            label="Email"
-            autoComplete="off"
-            inputProps={{
-              maxLength: MAX_EMAIL_LEN,
-            }}
-            autoFocus
-            required
-          />
-          <Field
-            className={classes.textField}
-            name="password"
-            component={renderTextField}
-            label="Password"
-            type="password"
-            inputProps={{
-              maxLength: MAX_PW_LEN,
-            }}
-            required
-          />
-
-          <Typography variant="body2" style={{ color: "red" }}>
-            {props.errorMessage}
-          </Typography>
-          <Button
-            type="submit"
-            className={classes.submit}
-            variant="contained"
-            fullWidth
-          >
+      <div className={classes.root}>
+        <Container component="main" maxWidth="xs" className={classes.form}>
+          <Hat style={{ height: "80", width: "80", fill: "#78909c" }} />
+          <Typography component="h1" variant="h5" className={classes.title}>
             Sign in
-          </Button>
-          <Typography variant="body2">
-            Don't have an account? Create one{" "}
-            <Link href="/signup" style={{ color: "#4791db" }}>
-              here
-            </Link>
-            .
           </Typography>
-        </form>
-      </Container>
+          <form onSubmit={props.handleSubmit(onSubmit)}>
+            <Field
+              className={classes.textField}
+              name="email"
+              component={renderTextField}
+              label="Email"
+              autoComplete="off"
+              inputProps={{
+                maxLength: MAX_EMAIL_LEN,
+              }}
+              autoFocus
+              required
+            />
+            <Field
+              className={classes.textField}
+              name="password"
+              component={renderTextField}
+              label="Password"
+              type="password"
+              inputProps={{
+                maxLength: MAX_PW_LEN,
+              }}
+              required
+            />
+
+            <Typography variant="body2" style={{ color: "red" }}>
+              {props.authError}
+            </Typography>
+            <Button
+              type="submit"
+              className={classes.submit}
+              variant="contained"
+              fullWidth
+            >
+              Sign in
+            </Button>
+            <Typography variant="body2">
+              Don't have an account? Create one{" "}
+              <Link href="/signup" style={{ color: "#4791db" }}>
+                here
+              </Link>
+              .
+            </Typography>
+          </form>
+        </Container>
+      </div>
     </CssBaseline>
   );
 }
 
 function mapStateToProps(state) {
-  return { user: state.auth.user, error: state.auth.error };
+  return { user: state.auth.user, authError: state.auth.error };
 }
 
 export default compose(

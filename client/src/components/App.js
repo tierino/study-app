@@ -6,8 +6,9 @@ import { connect } from "react-redux";
 import { fetchUser } from "../actions";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 
+import requireAuth from "./requireAuth";
 import Landing from "./Landing";
-import Home from "./dashboard/Home";
+import Home from "./Home";
 import Signin from "./auth/Signin";
 import Signup from "./auth/Signup";
 
