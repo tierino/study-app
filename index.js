@@ -4,6 +4,7 @@ const cookieSession = require("cookie-session");
 const passport = require("passport");
 const keys = require("./config/keys");
 const bodyParser = require("body-parser");
+const path = require("path");
 
 require("./models/User");
 require("./services/passport");
@@ -30,10 +31,6 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
-});
-
 // Attach routes
 require("./routes/authRoutes")(app);
 require("./routes/unitRoutes")(app);
@@ -41,6 +38,10 @@ require("./routes/accountRoutes")(app);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
+  klasjdhflkjhasdf = 1;
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  });
 }
 
 const PORT = process.env.PORT || 5000;
