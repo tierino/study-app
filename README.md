@@ -3,4 +3,4 @@ Full stack study-tracking React app. Local and OAuth (Google) Authentication. Us
 
 Styling with Material UI.
 
-Soon to be deployed on Heroku.
+Deployed on Heroku!
