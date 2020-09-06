@@ -1,7 +1,7 @@
 /* Main starting point */
 
 import React, { useEffect } from "react";
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route, Router } from "react-router-dom";
 import { connect } from "react-redux";
 import { fetchUser } from "../actions";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
@@ -11,6 +11,7 @@ import Landing from "./Landing";
 import Home from "./Home";
 import Signin from "./auth/Signin";
 import Signup from "./auth/Signup";
+import history from "./history";
 
 import { makeStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -64,12 +65,12 @@ const App = (props) => {
 
   return (
     <ThemeProvider theme={theme}>
-      <BrowserRouter>
+      <Router history={history}>
         <Route exact path="/" component={Landing}></Route>
         <Route exact path="/home" component={Home}></Route>
         <Route exact path="/signin" component={Signin}></Route>
         <Route exact path="/signup" component={Signup}></Route>
-      </BrowserRouter>
+      </Router>
     </ThemeProvider>
   );
 };

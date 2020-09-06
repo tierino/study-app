@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { reduxForm, Field } from "redux-form";
 import { compose } from "redux";
 import { connect, useDispatch } from "react-redux";
+import { withRouter } from "react-router-dom";
 
 import * as actions from "../../actions";
 import { ReactComponent as Hat } from "../../images/gradcap.svg";
@@ -171,7 +172,9 @@ function mapStateToProps(state) {
   return { user: state.auth.user, authError: state.auth.error };
 }
 
-export default compose(
-  connect(mapStateToProps, actions),
-  reduxForm({ form: "signup" })
-)(Signup);
+export default withRouter(
+  compose(
+    connect(mapStateToProps, actions),
+    reduxForm({ form: "signup" })
+  )(Signup)
+);
