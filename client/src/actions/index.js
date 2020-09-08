@@ -9,7 +9,6 @@ import {
 } from "./types";
 
 export const fetchUser = () => async (dispatch) => {
-  console.log("fetching user...");
   const response = await axios.get("/account/user");
 
   dispatch({ type: FETCH_USER, payload: response.data });
@@ -38,6 +37,7 @@ export const signin = (formProps, callback) => async (dispatch) => {
   }
 };
 
+// Fetch the unit with the passed-in name, and put it in state as selectedUnit.
 export const fetchUnit = (unitName) => async (dispatch) => {
   const response = await axios.get("/units/find", {
     params: { name: unitName },
@@ -49,6 +49,7 @@ export const fetchUnit = (unitName) => async (dispatch) => {
   });
 };
 
+// Fetch the select unit's assessments.
 export const fetchAssessments = (unitName) => async (dispatch) => {
   const response = await axios.get("/units/get_assessments", {
     params: { unit: unitName },
@@ -60,6 +61,7 @@ export const fetchAssessments = (unitName) => async (dispatch) => {
   });
 };
 
+// Clear the selected unit from state
 export const clearUnit = () => {
   return {
     type: CLEAR_UNIT,
