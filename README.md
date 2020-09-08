@@ -3,4 +3,4 @@ Full stack study-tracking React app. Local and OAuth (Google) Authentication. Us
 
 Can be run locally for development with **npm run dev**. 
 
-Deployed on Heroku! (But still a work-in-progress)
+Deployed on Heroku (but still a work-in-progress)! 
