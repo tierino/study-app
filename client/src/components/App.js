@@ -65,12 +65,12 @@ const App = (props) => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Router history={history}>
+      <BrowserRouter>
         <Route exact path="/" component={Landing}></Route>
         <Route exact path="/home" component={Home}></Route>
         <Route exact path="/signin" component={Signin}></Route>
         <Route exact path="/signup" component={Signup}></Route>
-      </Router>
+      </BrowserRouter>
     </ThemeProvider>
   );
 };

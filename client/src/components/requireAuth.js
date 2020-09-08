@@ -16,18 +16,18 @@ export default (ComposedComponent) => {
     }
     shouldNavigateAway() {
       if (!this.props.signedIn) {
-        // ** Problem here **
-        // this is updating the URL correctly, but the Landing
-        // component isn't mounting
         this.props.history.push("/");
+        this.props.history.go();
       }
     }
     render() {
       return <ComposedComponent {...this.props} />;
     }
   }
+
   function mapStateToProps(state) {
     return { signedIn: state.auth.user };
   }
-  return connect(mapStateToProps)(RequireAuth);
+
+  return withRouter(connect(mapStateToProps)(RequireAuth));
 };
