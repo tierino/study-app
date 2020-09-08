@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 
 import Signup from "./auth/Signup";
+import QuickSignIn from "./auth/QuickSignIn";
 
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -118,6 +119,7 @@ function Landing(props) {
           component={Paper}
           elevation={6}
         >
+          <QuickSignIn />
           <Signup />
         </Grid>
       </Grid>
