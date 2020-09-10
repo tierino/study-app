@@ -10,6 +10,7 @@ import { ReactComponent as Hat } from "../../images/gradcap.svg";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Link from "@material-ui/core/Link";
+import Divider from "@material-ui/core/Divider";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
@@ -140,7 +141,7 @@ function QuickSignin(props) {
 }
 
 function mapStateToProps(state) {
-  return { user: state.auth.user, authError: state.auth.error };
+  return { user: state.auth.user, authError: state.auth.signinError };
 }
 
 export default withRouter(

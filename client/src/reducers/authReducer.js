@@ -1,4 +1,9 @@
-import { FETCH_USER, AUTH_USER, AUTH_ERROR } from "../actions/types";
+import {
+  FETCH_USER,
+  AUTH_USER,
+  SIGNUP_ERROR,
+  SIGNIN_ERROR,
+} from "../actions/types";
 
 const initialState = {};
 
@@ -14,10 +19,15 @@ export default (state = initialState, { type, payload }) => {
         ...state,
         user: payload,
       };
-    case AUTH_ERROR:
+    case SIGNUP_ERROR:
       return {
         ...state,
-        error: payload,
+        signupError: payload,
+      };
+    case SIGNIN_ERROR:
+      return {
+        ...state,
+        signinError: payload,
       };
     default:
       return state;

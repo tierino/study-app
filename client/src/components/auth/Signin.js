@@ -142,7 +142,7 @@ function Signin(props) {
 }
 
 function mapStateToProps(state) {
-  return { user: state.auth.user, authError: state.auth.error };
+  return { user: state.auth.user, authError: state.auth.signinError };
 }
 
 export default withRouter(

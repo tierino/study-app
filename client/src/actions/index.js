@@ -2,7 +2,8 @@ import axios from "axios";
 import {
   FETCH_USER,
   AUTH_USER,
-  AUTH_ERROR,
+  SIGNUP_ERROR,
+  SIGNIN_ERROR,
   FETCH_UNIT,
   FETCH_ASSESSMENTS,
   CLEAR_UNIT,
@@ -21,7 +22,7 @@ export const signup = (formProps, callback) => async (dispatch) => {
     // Redirects user to '/home'
     callback();
   } catch (e) {
-    dispatch({ type: AUTH_ERROR, payload: "Email in use." });
+    dispatch({ type: SIGNUP_ERROR, payload: "Email in use." });
   }
 };
 
@@ -33,7 +34,7 @@ export const signin = (formProps, callback) => async (dispatch) => {
     // Redirects user to '/home'
     callback();
   } catch (e) {
-    dispatch({ type: AUTH_ERROR, payload: "Invalid email or password." });
+    dispatch({ type: SIGNIN_ERROR, payload: "Invalid email or password." });
   }
 };
 
