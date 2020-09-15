@@ -1,4 +1,6 @@
 # Study App
+#### See the deployed application [here](https://pure-shore-38641.herokuapp.com/).
+
 Full stack study-tracking React app. Local and OAuth (Google) Authentication. User info stored in MongoDB. Users can manage units and their assessments with useful details (weights, due dates etc.) to track unit progress and grades, and see upcoming assessments. Styling with Material UI.
 
 Can be run locally for development with **npm run dev**. 
