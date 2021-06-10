@@ -4,7 +4,7 @@ A simple study-tracker app. Users can manage units and assessments to track prog
 
 ### Inclusions
 - MERN stack
-- Passportjs (with OAuth)
+- [Passport](https://github.com/jaredhanson/passport)
 - Material UI
 
 #### See the deployed app [here](https://pure-shore-38641.herokuapp.com/).
